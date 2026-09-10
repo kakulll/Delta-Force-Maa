@@ -1,0 +1,106 @@
+{
+    "Shelter.Start": {
+        "action": "DoNothing",
+        "next": [
+            "Shelter.EnterDepartment",
+            "Shelter.ClaimCraftedItems",
+            "Startup.CheckLobby"
+        ]
+    },
+    "Shelter.EnterDepartment": {
+        "recognition": "OCR",
+        "roi": [
+            300,
+            0,
+            680,
+            200
+        ],
+        "expected": [
+            "特勤处"
+        ],
+        "action": "Click",
+        "post_delay": 1500,
+        "next": [
+            "Shelter.ClaimCraftedItems",
+            "Shelter.CheckGenerator",
+            "Shelter.ReturnLobby"
+        ]
+    },
+    "Shelter.ClaimCraftedItems": {
+        "recognition": "OCR",
+        "roi": [
+            500,
+            500,
+            750,
+            200
+        ],
+        "expected": [
+            "全部收获",
+            "一键收取",
+            "收取"
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "next": [
+            "CommonClosePopup",
+            "Shelter.CheckGenerator",
+            "Shelter.ReturnLobby"
+        ]
+    },
+    "Shelter.CheckGenerator": {
+        "recognition": "OCR",
+        "roi": [
+            0,
+            200,
+            600,
+            500
+        ],
+        "expected": [
+            "发电机",
+            "动力室"
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "next": [
+            "Shelter.Refuel",
+            "Shelter.ReturnLobby"
+        ]
+    },
+    "Shelter.Refuel": {
+        "recognition": "OCR",
+        "roi": [
+            700,
+            400,
+            550,
+            300
+        ],
+        "expected": [
+            "补充燃料",
+            "快速添加",
+            "添加燃油"
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "next": [
+            "CommonClosePopup",
+            "Shelter.ReturnLobby"
+        ]
+    },
+    "Shelter.ReturnLobby": {
+        "recognition": "OCR",
+        "roi": [
+            0,
+            0,
+            250,
+            150
+        ],
+        "expected": [
+            "返回"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "Startup.CheckLobby"
+        ]
+    }
+}

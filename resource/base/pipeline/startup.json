@@ -1,0 +1,71 @@
+{
+    "Startup.Start": {
+        "action": "DoNothing",
+        "next": [
+            "Startup.CheckLobby",
+            "Startup.CloseAnnouncement",
+            "Startup.EnterGame",
+            "CommonClosePopup"
+        ]
+    },
+    "Startup.CheckLobby": {
+        "recognition": "OCR",
+        "roi": [
+            0,
+            0,
+            1280,
+            720
+        ],
+        "expected": [
+            "烽火地带",
+            "全面战场",
+            "特勤处",
+            "开始匹配",
+            "行动"
+        ],
+        "action": "DoNothing"
+    },
+    "Startup.CloseAnnouncement": {
+        "recognition": "OCR",
+        "roi": [
+            800,
+            50,
+            450,
+            250
+        ],
+        "expected": [
+            "跳过",
+            "关闭",
+            "X"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "Startup.CheckLobby",
+            "Startup.CloseAnnouncement",
+            "CommonClosePopup"
+        ]
+    },
+    "Startup.EnterGame": {
+        "recognition": "OCR",
+        "roi": [
+            300,
+            450,
+            680,
+            220
+        ],
+        "expected": [
+            "点击任意位置进入",
+            "进入游戏",
+            "开始游戏",
+            "点击进入"
+        ],
+        "action": "Click",
+        "post_delay": 2000,
+        "next": [
+            "Startup.CloseAnnouncement",
+            "Startup.CheckLobby",
+            "CommonClosePopup"
+        ]
+    }
+}

@@ -1,0 +1,9 @@
+{
+    "task": [
+        {
+            "name": "Daily",
+            "label": "每日日常福利领取",
+            "entry": "Daily.Start"
+        }
+    ]
+}

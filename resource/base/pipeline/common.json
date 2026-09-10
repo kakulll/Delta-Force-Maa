@@ -1,0 +1,35 @@
+{
+    "CommonClosePopup": {
+        "recognition": "OCR",
+        "roi": [
+            350,
+            400,
+            580,
+            260
+        ],
+        "expected": [
+            "确定",
+            "关闭",
+            "我知道了",
+            "领取",
+            "取消"
+        ],
+        "action": "Click",
+        "post_delay": 500
+    },
+    "CommonReturnLobby": {
+        "recognition": "OCR",
+        "roi": [
+            0,
+            0,
+            300,
+            150
+        ],
+        "expected": [
+            "返回",
+            "退出"
+        ],
+        "action": "Click",
+        "post_delay": 500
+    }
+}

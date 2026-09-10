@@ -1,0 +1,36 @@
+{
+    "interface_version": 2,
+    "name": "delta-force",
+    "label": "三角洲行动 Maa",
+    "version": "v0.1.0",
+    "description": "三角洲行动 Maa MaaFW project",
+    "controller": [
+        {
+            "name": "PC",
+            "label": "三角洲行动 PC客户端",
+            "type": "Win32"
+        }
+    ],
+    "resource": [
+        {
+            "name": "base",
+            "label": "Base",
+            "path": [
+                "./resource/base"
+            ]
+        }
+    ],
+    "import": [
+        "./tasks/startup.json",
+        "./tasks/daily.json",
+        "./tasks/shelter.json"
+    ],
+    "agent": [
+        {
+            "child_exec": "python",
+            "child_args": [
+                "agent/bootstrap.py"
+            ]
+        }
+    ]
+}

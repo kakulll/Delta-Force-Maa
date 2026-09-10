@@ -1,0 +1,10 @@
+# BEGIN create-maa-project
+node_modules/
+.venv/
+.uv-cache/
+__pycache__/
+config/
+dist/
+debug/
+.create-maa-project/
+# END create-maa-project

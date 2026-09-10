@@ -1,0 +1,9 @@
+{
+    "task": [
+        {
+            "name": "Startup",
+            "label": "启动检查与跳过弹窗",
+            "entry": "Startup.Start"
+        }
+    ]
+}

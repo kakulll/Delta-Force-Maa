@@ -1,0 +1,66 @@
+{
+    "addons": {
+        "devTools": {
+            "enabled": true
+        }
+    },
+    "controller": {
+        "kinds": [
+            "Win32"
+        ]
+    },
+    "features": {
+        "ci": {
+            "enabled": false
+        },
+        "quality": {
+            "enabled": true
+        },
+        "release": {
+            "enabled": false
+        },
+        "vscode": {
+            "enabled": true
+        }
+    },
+    "license": {
+        "spdx": "MIT"
+    },
+    "maafw": {
+        "channel": "stable",
+        "version": ""
+    },
+    "network": {
+        "mode": "auto"
+    },
+    "project": {
+        "displayName": "三角洲行动 Maa",
+        "initialTemplate": "agent",
+        "slug": "delta-force",
+        "version": "0.1.0"
+    },
+    "python": {
+        "devCommand": [
+            "python",
+            "agent/bootstrap.py"
+        ],
+        "recommendedPython": "3.12",
+        "requiresPython": ">=3.12,<3.14"
+    },
+    "resources": [
+        {
+            "enabled": true,
+            "label": "Base",
+            "path": "resource/base",
+            "slug": "base"
+        }
+    ],
+    "runtime": {
+        "mfa": {
+            "channel": "stable",
+            "enabled": false,
+            "version": ""
+        }
+    },
+    "schemaVersion": 2
+}

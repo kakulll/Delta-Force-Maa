@@ -1,0 +1,124 @@
+{
+    "Daily.Start": {
+        "action": "DoNothing",
+        "next": [
+            "Daily.OpenMail",
+            "Daily.OpenSeasonPass",
+            "Startup.CheckLobby"
+        ]
+    },
+    "Daily.OpenMail": {
+        "recognition": "OCR",
+        "roi": [
+            800,
+            0,
+            480,
+            200
+        ],
+        "expected": [
+            "邮件",
+            "信箱"
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "next": [
+            "Daily.ClaimAllMail",
+            "Daily.CloseMail"
+        ]
+    },
+    "Daily.ClaimAllMail": {
+        "recognition": "OCR",
+        "roi": [
+            50,
+            500,
+            400,
+            200
+        ],
+        "expected": [
+            "全部领取",
+            "一键领取"
+        ],
+        "action": "Click",
+        "post_delay": 1200,
+        "next": [
+            "CommonClosePopup",
+            "Daily.CloseMail"
+        ]
+    },
+    "Daily.CloseMail": {
+        "recognition": "OCR",
+        "roi": [
+            0,
+            0,
+            250,
+            150
+        ],
+        "expected": [
+            "返回",
+            "关闭"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "Daily.OpenSeasonPass",
+            "Startup.CheckLobby"
+        ]
+    },
+    "Daily.OpenSeasonPass": {
+        "recognition": "OCR",
+        "roi": [
+            0,
+            100,
+            400,
+            300
+        ],
+        "expected": [
+            "战备手账",
+            "通行证",
+            "赛季手册"
+        ],
+        "action": "Click",
+        "post_delay": 1500,
+        "next": [
+            "Daily.ClaimPassReward",
+            "Daily.CloseSeasonPass"
+        ]
+    },
+    "Daily.ClaimPassReward": {
+        "recognition": "OCR",
+        "roi": [
+            800,
+            550,
+            450,
+            150
+        ],
+        "expected": [
+            "全部领取",
+            "一键领取",
+            "领取奖励"
+        ],
+        "action": "Click",
+        "post_delay": 1200,
+        "next": [
+            "CommonClosePopup",
+            "Daily.CloseSeasonPass"
+        ]
+    },
+    "Daily.CloseSeasonPass": {
+        "recognition": "OCR",
+        "roi": [
+            0,
+            0,
+            250,
+            150
+        ],
+        "expected": [
+            "返回"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "Startup.CheckLobby"
+        ]
+    }
+}

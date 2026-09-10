@@ -1,0 +1,9 @@
+{
+    "task": [
+        {
+            "name": "Shelter",
+            "label": "特勤处自动收菜与补油",
+            "entry": "Shelter.Start"
+        }
+    ]
+}
