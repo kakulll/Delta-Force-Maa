@@ -1,0 +1,18 @@
+{
+  "id": "Windsland52/maafw-template-migration",
+  "title": "MaaFW Template Migration",
+  "description": "Guide for migrating legacy MaaFramework projects (assets/ + deps/ structure, install*.py CI) to the create-maa-project scaffold (maa-project.json, build-release.mjs, sync-runtime.mjs).",
+  "author": "Windsland52",
+  "source": "M9A",
+  "sourceGithub": "https://github.com/MAA1999/M9A",
+  "tags": ["migration", "create-maa-project", "template", "skill"],
+  "createdAt": "2026-07-07",
+  "updatedAt": "2026-07-07",
+  "version": "0.1.0",
+  "mfwVersion": "5.11.1",
+  "entry": "SKILL.md",
+  "readme": "./README.md",
+  "status": "beta",
+  "type": "skill",
+  "category": "migration"
+}

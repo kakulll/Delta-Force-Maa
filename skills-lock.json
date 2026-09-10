@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "skills": {
+    "maafw-template-migration": {
+      "source": "MaaXYZ/MaaHub",
+      "sourceType": "github",
+      "skillPath": "Storage/skills/Windsland52/maafw-template-migration/SKILL.md",
+      "computedHash": "170a40ac071a68156727b5d3e80a4f747e9602e909f6fca02451ec4ac7f9fa8d"
+    },
+    "pipeline-generate": {
+      "source": "MaaXYZ/MaaHub",
+      "sourceType": "github",
+      "skillPath": "Storage/skills/KhazixW2/pipeline-generate/SKILL.md",
+      "computedHash": "9259e431653dde334d80f4e0e814005ae080654bcddabb4dd812d1c2b4e18baf"
+    },
+    "pipeline-guide": {
+      "source": "MaaXYZ/MaaHub",
+      "sourceType": "github",
+      "skillPath": "Storage/skills/KhazixW2/pipeline-guide/SKILL.md",
+      "computedHash": "611b9693b14a5fc22b0819a68744d74883404ccf78b0b28b1e62d54adc7d515a"
+    },
+    "pipeline-option": {
+      "source": "MaaXYZ/MaaHub",
+      "sourceType": "github",
+      "skillPath": "Storage/skills/KhazixW2/pipeline-option/SKILL.md",
+      "computedHash": "5646007b8ce4d105600d6de35f8075e2139c79a44d2409d4721be59d15caca8b"
+    },
+    "pipeline-testing": {
+      "source": "MaaXYZ/MaaHub",
+      "sourceType": "github",
+      "skillPath": "Storage/skills/KhazixW2/pipeline-testing/SKILL.md",
+      "computedHash": "befe91ee8b91a864b970add1fb4c5d4994815daccf9e17a5069f15bb344a3a0d"
+    },
+    "pr-template": {
+      "source": "MaaXYZ/MaaHub",
+      "sourceType": "github",
+      "skillPath": "Storage/skills/MaaHub/pr-template/SKILL.md",
+      "computedHash": "68ed91e216c6f6925878d92733e5b5e3cbe64880ac8e5f09120202072f9a90eb"
+    }
+  }
+}
