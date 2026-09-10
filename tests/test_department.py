@@ -62,66 +62,91 @@ SPEC_PIPELINE_NODES = {
         "post_delay": 1200,
         "timeout": 5000,
         "next": [
+            "Department.EnterCombatCard",
+            "Department.TabCombat"
+        ],
+        "on_error": [
+            "Department.EnterCombatCard",
+            "Department.TabCombat"
+        ]
+    },
+    "Department.EnterCombatCard": {
+        "recognition": "OCR",
+        "roi": [150, 850, 300, 200],
+        "expected": ["战斗部门", "战斗"],
+        "action": "Click",
+        "post_delay": 1200,
+        "next": [
+            "Department.TabCombat",
+            "Department.ScanFreeItem",
+            "Department.ScanQuotaItem"
+        ],
+        "on_error": [
             "Department.TabCombat"
         ]
     },
     "Department.TabCombat": {
         "recognition": "OCR",
         "roi": [180, 70, 140, 60],
-        "expected": ["战斗部门"],
+        "expected": ["战斗部门", "战斗"],
         "action": "Click",
         "post_delay": 800,
         "next": [
             "Department.ScanFreeItem",
             "Department.ScanQuotaItem",
+            "Department.CheckLocked",
             "Department.TabMedical"
         ]
     },
     "Department.TabMedical": {
         "recognition": "OCR",
         "roi": [350, 70, 140, 60],
-        "expected": ["医疗部门"],
+        "expected": ["医疗部门", "医疗"],
         "action": "Click",
         "post_delay": 800,
         "next": [
             "Department.ScanFreeItem",
             "Department.ScanQuotaItem",
+            "Department.CheckLocked",
             "Department.TabLogistics"
         ]
     },
     "Department.TabLogistics": {
         "recognition": "OCR",
         "roi": [520, 70, 140, 60],
-        "expected": ["后勤部门"],
+        "expected": ["后勤部门", "后勤"],
         "action": "Click",
         "post_delay": 800,
         "next": [
             "Department.ScanFreeItem",
             "Department.ScanQuotaItem",
+            "Department.CheckLocked",
             "Department.TabTactical"
         ]
     },
     "Department.TabTactical": {
         "recognition": "OCR",
         "roi": [700, 70, 140, 60],
-        "expected": ["战术部门"],
+        "expected": ["战术部门", "战术"],
         "action": "Click",
         "post_delay": 800,
         "next": [
             "Department.ScanFreeItem",
             "Department.ScanQuotaItem",
+            "Department.CheckLocked",
             "Department.TabRD"
         ]
     },
     "Department.TabRD": {
         "recognition": "OCR",
         "roi": [870, 70, 140, 60],
-        "expected": ["研发部门"],
+        "expected": ["研发部门", "研发"],
         "action": "Click",
         "post_delay": 800,
         "next": [
             "Department.ScanFreeItem",
             "Department.ScanQuotaItem",
+            "Department.CheckLocked",
             "Department.ReturnToLobby"
         ]
     },
@@ -179,11 +204,12 @@ SPEC_PIPELINE_NODES = {
     "Department.CheckLocked": {
         "recognition": "OCR",
         "roi": [100, 240, 1800, 1250],
-        "expected": ["解锁条件", "等级解锁", "暂未开放"],
+        "expected": ["行动等级", "等级解锁", "解锁条件", "解锁", "暂未开放"],
         "action": "DoNothing",
         "next": [
             "Department.SkipLockedSector"
-        ]
+        ],
+        "max_hit": 5
     },
     "Department.SkipLockedSector": {
         "action": "DoNothing",
@@ -193,7 +219,8 @@ SPEC_PIPELINE_NODES = {
             "Department.TabTactical",
             "Department.TabRD",
             "Department.ReturnToLobby"
-        ]
+        ],
+        "max_hit": 5
     },
     "Department.ReturnToLobby": {
         "recognition": "OCR",
@@ -204,7 +231,24 @@ SPEC_PIPELINE_NODES = {
         "next": [
             "Startup.CheckLobby",
             "Department.EscReturn"
+        ],
+        "on_error": [
+            "Department.SubpageReturn",
+            "Department.EscReturn"
         ]
+    },
+    "Department.SubpageReturn": {
+        "recognition": "OCR",
+        "roi": [120, 1520, 120, 70],
+        "expected": ["返回", "Esc", "ESC"],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "Department.ReturnToLobby",
+            "Startup.CheckLobby",
+            "Department.EscReturn"
+        ],
+        "max_hit": 3
     },
     "Department.EscReturn": {
         "action": "ClickKey",
@@ -456,6 +500,30 @@ class TestTier1F2QuartermasterEntry(unittest.TestCase):
         node = self.nodes["Department.EnterQuartermaster"]
         self.assertIn("Department.TabCombat", node.get("next", []))
 
+    def test_f2_quartermaster_combat_card_node_specification(self):
+        """2.6: Verify EnterCombatCard node specification, ROI bounds, and transitions."""
+        self.assertIn("Department.EnterCombatCard", self.nodes)
+        card_node = self.nodes["Department.EnterCombatCard"]
+        self.assertEqual(card_node["recognition"], "OCR")
+        self.assertEqual(card_node["action"], "Click")
+        self.assertEqual(card_node["roi"], [150, 850, 300, 200])
+        x, y, w, h = card_node["roi"]
+        self.assertGreaterEqual(x, 0)
+        self.assertGreaterEqual(y, 0)
+        self.assertLessEqual(x + w, 2560)
+        self.assertLessEqual(y + h, 1600)
+        self.assertTrue(x <= 284 <= x + w)
+        self.assertTrue(y <= 983 <= y + h)
+        self.assertIn("战斗部门", card_node["expected"])
+        self.assertIn("战斗", card_node["expected"])
+        self.assertEqual(card_node.get("post_delay"), 1200)
+        self.assertIn("Department.TabCombat", card_node.get("next", []))
+        self.assertIn("Department.TabCombat", card_node.get("on_error", []))
+
+        # Verify EnterQuartermaster leads to EnterCombatCard
+        qm_node = self.nodes["Department.EnterQuartermaster"]
+        self.assertIn("Department.EnterCombatCard", qm_node.get("next", []))
+
 
 class TestTier1F3SectorTabsTraversal(unittest.TestCase):
     """F3: 5 Sector Tabs Traversal"""
@@ -691,6 +759,12 @@ class TestTier1F8SafeDeadlockFreeReturn(unittest.TestCase):
         next_esc = self.nodes["Department.EscReturn"].get("next", [])
         self.assertTrue("Startup.CheckLobby" in next_ret or "Department.EscReturn" in next_ret)
         self.assertIn("Startup.CheckLobby", next_esc)
+
+    def test_f8_subpage_return_bounded_max_hit(self):
+        """8.6: Verify SubpageReturn has max_hit == 3 to prevent unbounded 2-node cycle."""
+        node = self.nodes.get("Department.SubpageReturn")
+        self.assertIsNotNone(node)
+        self.assertEqual(node.get("max_hit"), 3)
 
 
 class TestTier1F9DeclarativePipelineSpecification(unittest.TestCase):

@@ -61,7 +61,7 @@ def check_keywords_in_results(results: list[dict], keywords: list[str], roi: lis
         if roi:
             rx, ry, rw, rh = roi
             bx, by, bw, bh = box
-            # Check overlap / containment
+            # Check overlap / containment with 10-20px tolerance
             if bx < rx - 10 or by < ry - 10 or (bx + bw) > (rx + rw + 20) or (by + bh) > (ry + rh + 20):
                 continue
         for kw in keywords:
@@ -79,11 +79,71 @@ class DepartmentLiveTester:
         self.artifacts_dir = ROOT_DIR / "resource" / "base" / "image" / "live_test_department"
         self.artifacts_dir.mkdir(parents=True, exist_ok=True)
         self.summary_log = []
+        self.pipeline_nodes = self._load_pipeline_nodes()
+
+    def _load_pipeline_nodes(self) -> dict:
+        pipeline_file = ROOT_DIR / "resource" / "base" / "pipeline" / "department.json"
+        if pipeline_file.exists():
+            try:
+                with open(pipeline_file, "r", encoding="utf-8") as f:
+                    return json.load(f)
+            except Exception:
+                pass
+        return {}
 
     def log(self, stage: str, status: str, details: str = ""):
         entry = f"[{time.strftime('%H:%M:%S')}] [{stage:^12}] {status:<8} | {details}"
         print(entry, flush=True)
         self.summary_log.append(entry)
+
+    def is_lobby_root(self, res: list[dict]) -> bool:
+        """Unambiguously verifies that the client is at the actual Lobby root screen.
+        Requires both top-bar '开始游戏' AND bottom-bar '切换模式', while ensuring
+        no subpage tabs (Department, Trading, Sector store) are present.
+        """
+        has_top = bool(check_keywords_in_results(res, ["开始游戏"], roi=[150, 20, 400, 100]))
+        has_switch = bool(check_keywords_in_results(res, ["切换模式", "换模式"], roi=[120, 1500, 300, 90]))
+        subtabs = check_keywords_in_results(
+            res,
+            ["部门任务", "赛季任务", "军需处", "战斗部门", "医疗部门", "后勤部门", "战术部门", "研发部门"],
+            roi=[150, 70, 900, 100]
+        )
+        return has_top and has_switch and (len(subtabs) == 0)
+
+    def ensure_inside_sector_store(self) -> bool:
+        """Verifies client is inside a sector store view. If kicked back, recovers gracefully."""
+        img = capture_window(self.hwnd, self.artifacts_dir / "store_guard_check.png")
+        res = run_ocr(img)
+
+        # 1. Direct check: In-store sector tabs at Y ≈ 86
+        in_store = bool(check_keywords_in_results(
+            res,
+            ["战斗部门", "医疗部门", "后勤部门", "战术部门", "研发部门"],
+            roi=[180, 70, 900, 50]
+        ))
+        if in_store:
+            return True
+
+        # 2. Check if kicked back to Quartermaster index
+        is_qm_index = bool(check_keywords_in_results(res, ["军需处"], roi=[500, 100, 200, 60]))
+        if is_qm_index:
+            self.log("GUARD", "WARN", "Client at Quartermaster index; re-entering sector store via card...")
+            click_point(self.hwnd, 284, 983)
+            time.sleep(1.5)
+            return True
+
+        # 3. Check if kicked back to Lobby root
+        if self.is_lobby_root(res):
+            self.log("GUARD", "WARN", "Client kicked back to Lobby; navigating back to sector store...")
+            click_point(self.hwnd, 773, 70)   # 部门
+            time.sleep(1.5)
+            click_point(self.hwnd, 605, 142)  # 军需处
+            time.sleep(1.5)
+            click_point(self.hwnd, 284, 983)  # 战斗部门 card
+            time.sleep(1.5)
+            return True
+
+        return False
 
     def attach_client(self) -> bool:
         self.hwnd = get_game_hwnd()
@@ -105,11 +165,11 @@ class DepartmentLiveTester:
         """Executes the 4-Tier Safe Return Escalation Ladder back to Lobby."""
         self.log("ESCALATION", "START", "Executing safe return ladder...")
 
-        # Probe current screen first
+        # Probe current screen first: only short-circuit if TRULY at Lobby root
         img = capture_window(self.hwnd, self.artifacts_dir / "esc_probe.png")
         res = run_ocr(img)
-        if check_keywords_in_results(res, ["开始游戏"], roi=[150, 20, 400, 100]):
-            self.log("ESCALATION", "LOBBY", "Already at Lobby root.")
+        if self.is_lobby_root(res):
+            self.log("ESCALATION", "LOBBY", "Already at verified Lobby root.")
             return True
 
         # Tier 1: Direct Click "开始游戏"
@@ -117,7 +177,7 @@ class DepartmentLiveTester:
         time.sleep(1.0)
         img = capture_window(self.hwnd, self.artifacts_dir / "esc_tier1_check.png")
         res = run_ocr(img)
-        if check_keywords_in_results(res, ["开始游戏"], roi=[150, 20, 400, 100]):
+        if self.is_lobby_root(res):
             self.log("ESCALATION", "TIER 1", "Direct header click succeeded -> In Lobby.")
             return True
 
@@ -131,14 +191,14 @@ class DepartmentLiveTester:
             box = leave_shelter[0]["box"]
             click_point(self.hwnd, box[0] + box[2] // 2, box[1] + box[3] // 2)
             time.sleep(1.5)
-        if check_keywords_in_results(res, ["Tab 开始游戏", "开始游戏"]):
+        if check_keywords_in_results(res, ["Tab 开始游戏"]):
             press_key(self.hwnd, 0x09, delay_after=1.0)
 
         click_point(self.hwnd, 254, 71)
         time.sleep(1.0)
         img = capture_window(self.hwnd, self.artifacts_dir / "esc_tier2_check.png")
         res = run_ocr(img)
-        if check_keywords_in_results(res, ["开始游戏"], roi=[150, 20, 400, 100]):
+        if self.is_lobby_root(res):
             self.log("ESCALATION", "TIER 2", "Subpage / Tab return succeeded -> In Lobby.")
             return True
 
@@ -154,9 +214,8 @@ class DepartmentLiveTester:
         # Tier 4: Terminal Lobby Assertion
         img = capture_window(self.hwnd, self.artifacts_dir / "esc_tier4_check.png")
         res = run_ocr(img)
-        lobby_matches = check_keywords_in_results(res, ["开始游戏", "仓库", "部门", "交易行"], roi=[150, 20, 1200, 80])
-        if len(lobby_matches) >= 2:
-            self.log("ESCALATION", "TIER 4", f"Terminal verification confirmed ({len(lobby_matches)} anchors).")
+        if self.is_lobby_root(res):
+            self.log("ESCALATION", "TIER 4", "Terminal multi-anchor verification confirmed Lobby root.")
             return True
 
         self.log("ESCALATION", "FAILED", "CRITICAL: Unable to confirm return to Lobby.")
@@ -195,7 +254,8 @@ class DepartmentLiveTester:
 
         # Simulate DryRun traversal
         dryrun_nodes = json.loads(json.dumps(nodes))
-        dryrun_nodes["Department.ConfirmExchangeDialog"]["enabled"] = False
+        if "Department.ConfirmExchangeDialog" in dryrun_nodes:
+            dryrun_nodes["Department.ConfirmExchangeDialog"]["enabled"] = False
 
         screen_tokens = ["部门", "军需处", "战斗部门", "免费", "开始游戏"]
         current = "Department.Start"
@@ -259,9 +319,8 @@ class DepartmentLiveTester:
         time.sleep(1.0)
         img0 = capture_window(self.hwnd, self.artifacts_dir / "step0_lobby.png")
         res0 = run_ocr(img0)
-        in_lobby = bool(check_keywords_in_results(res0, ["开始游戏"], roi=[150, 20, 300, 100]))
-        if not in_lobby:
-            self.log("STEP 0", "WARN", "Client not currently in Lobby. Attempting escalation ladder.")
+        if not self.is_lobby_root(res0):
+            self.log("STEP 0", "WARN", "Client not currently in Lobby root (subpage detected). Attempting escalation ladder.")
             if not self.safe_return_escalation():
                 return False
         self.log("STEP 0", "PASSED", "Confirmed client is at Lobby root.")
@@ -279,7 +338,7 @@ class DepartmentLiveTester:
             return False
         self.log("STEP 1", "PASSED", f"Department page loaded. Found tabs: {[t['text'] for t in dept_tabs]}")
 
-        # Step 2: Enter 军需处 (Quartermaster)
+        # Step 2: Enter 军需处 (Quartermaster) & Validate Declarative Card Node
         self.log("STEP 2", "RUNNING", "Clicking '军需处' at (605, 142)...")
         click_point(self.hwnd, 605, 142)
         time.sleep(1.5)
@@ -287,44 +346,70 @@ class DepartmentLiveTester:
         res2 = run_ocr(img2)
         sectors = check_keywords_in_results(res2, ["战斗部门", "医疗部门", "后勤部门", "战术部门", "研发部门"])
         if not sectors:
-            self.log("STEP 2", "FAILED", "Quartermaster sector tabs not recognized.")
+            self.log("STEP 2", "FAILED", "Quartermaster sector tabs/cards not recognized.")
             self.safe_return_escalation()
             return False
         self.log("STEP 2", "PASSED", f"Quartermaster opened. Found sectors: {[s['text'] for s in sectors]}")
 
-        # If on Quartermaster index page with sector cards, enter first sector (Combat)
-        combat_card = [s for s in sectors if "战斗部门" in s["text"] and s["box"][1] > 500]
-        if combat_card:
-            cb = combat_card[0]["box"]
-            self.log("STEP 2", "INFO", f"Entering 战斗部门 store via card at ({cb[0] + cb[2]//2}, {cb[1] + cb[3]//2})...")
+        # Validate declarative pipeline node: Department.EnterCombatCard
+        card_node = self.pipeline_nodes.get("Department.EnterCombatCard")
+        if card_node:
+            roi_card = card_node.get("roi", [150, 850, 300, 200])
+            expected_card = card_node.get("expected", ["战斗部门", "战斗"])
+            card_matches = check_keywords_in_results(res2, expected_card, roi=roi_card)
+            if not card_matches:
+                self.log("STEP 2", "FAILED", f"Declarative node 'Department.EnterCombatCard' failed to match in ROI {roi_card}.")
+                self.safe_return_escalation()
+                return False
+            self.log("STEP 2", "PASSED", f"Declarative node 'Department.EnterCombatCard' matched: {[m['text'] for m in card_matches]}")
+            cb = card_matches[0]["box"]
             click_point(self.hwnd, cb[0] + cb[2] // 2, cb[1] + cb[3] // 2)
             time.sleep(1.5)
+        else:
+            self.log("STEP 2", "WARN", "Declarative 'Department.EnterCombatCard' missing in pipeline; fallback to procedural sector card scan.")
+            combat_card = [s for s in sectors if "战斗部门" in s["text"] and s["box"][1] > 500]
+            if combat_card:
+                cb = combat_card[0]["box"]
+                click_point(self.hwnd, cb[0] + cb[2] // 2, cb[1] + cb[3] // 2)
+                time.sleep(1.5)
 
         # Step 3: Sector Traversal & Locked Tab Non-Blocking Verification
         self.log("STEP 3", "RUNNING", "Testing sector tab traversal & lock safeguards...")
-        # 3a. Verify Combat tab at Y=86
-        click_point(self.hwnd, 255, 86)
+        # 3a. Target Combat tab at safe in-store coordinate (254, 100)
+        click_point(self.hwnd, 254, 100)
         time.sleep(1.0)
+
         # 3b. Probe 研发部门 at Y=86 for lock conditions
         self.log("STEP 3", "INFO", "Probing '研发部门' tab at (946, 86) for lock conditions...")
         click_point(self.hwnd, 946, 86)
         time.sleep(1.2)
         img_rd = capture_window(self.hwnd, self.artifacts_dir / "step3_rd_sector.png")
         res_rd = run_ocr(img_rd)
-        lock_prompts = check_keywords_in_results(res_rd, ["解锁", "等级不足", "未开放", "条件不足", "未达到"])
-        if lock_prompts:
-            self.log("STEP 3", "LOCKED", f"Detected level gate: {[p['text'] for p in lock_prompts]}. Dismissing via Esc.")
+
+        # Look specifically for centered modal prompt, NOT store item badges
+        modal_prompts = check_keywords_in_results(
+            res_rd,
+            ["解锁条件", "暂未开放", "条件不足", "等级不足", "未开放"],
+            roi=[600, 400, 1360, 800]
+        )
+        if modal_prompts:
+            self.log("STEP 3", "LOCKED", f"Detected level gate modal: {[p['text'] for p in modal_prompts]}. Dismissing via Esc.")
             press_key(self.hwnd, VK_ESCAPE, delay_after=0.6)
-            self.log("STEP 3", "PASSED", "Lock prompt cleanly dismissed without stall.")
+            self.log("STEP 3", "PASSED", "Lock modal cleanly dismissed without stall.")
         else:
             self.log("STEP 3", "PASSED", "R&D sector is unlocked or accessible on this account.")
 
-        # Switch back to Combat or Logistics for item scan
-        click_point(self.hwnd, 255, 86)
+        # 3c. Return to Combat sector tab inside store using safe coordinate (254, 100)
+        click_point(self.hwnd, 254, 100)
         time.sleep(1.0)
 
         # Step 4: Free Welfare Pack Detection & Claim Verification
         self.log("STEP 4", "RUNNING", "Scanning for daily free welfare packs...")
+        if not self.ensure_inside_sector_store():
+            self.log("STEP 4", "FAILED", "Precondition failure: Client is not inside sector store.")
+            self.safe_return_escalation()
+            return False
+
         img4 = capture_window(self.hwnd, self.artifacts_dir / "step4_item_grid.png")
         res4 = run_ocr(img4)
         free_packs = check_keywords_in_results(res4, ["免费", "每日补给", "免费礼包"], roi=[100, 240, 1800, 1250])
@@ -351,6 +436,11 @@ class DepartmentLiveTester:
 
         # Step 5: Quota / Discount Item Detection & DryRun Abort
         self.log("STEP 5", "RUNNING", "Scanning for quota / discount items...")
+        if not self.ensure_inside_sector_store():
+            self.log("STEP 5", "FAILED", "Precondition failure: Client is not inside sector store.")
+            self.safe_return_escalation()
+            return False
+
         quota_items = check_keywords_in_results(res4, ["限购", "限购1", "限购2"], roi=[100, 240, 1800, 1250])
         if quota_items:
             q_target = quota_items[0]
@@ -398,12 +488,11 @@ class DepartmentLiveTester:
         self.log("STEP 7", "RUNNING", "Performing final multi-anchor Lobby verification...")
         img_final = capture_window(self.hwnd, self.artifacts_dir / "step7_final_lobby.png")
         res_final = run_ocr(img_final)
-        anchors = check_keywords_in_results(res_final, ["开始游戏", "仓库", "部门", "交易行"], roi=[150, 20, 1200, 80])
-        if len(anchors) < 2:
-            self.log("STEP 7", "FAILED", f"Expected >= 2 anchors, found only: {[a['text'] for a in anchors]}")
+        if not self.is_lobby_root(res_final):
+            self.log("STEP 7", "FAILED", "Final Lobby verification failed: Client not at Lobby root.")
             return False
 
-        self.log("STEP 7", "PASSED", f"100% Confirmed Lobby State! Anchors: {[a['text'] for a in anchors]}")
+        self.log("STEP 7", "PASSED", "100% Confirmed Lobby State! Verified via top header and mode switch anchors.")
 
         print("\n" + "=" * 80)
         print("=== LIVE HARDWARE DEPARTMENT TEST PASSED 100% ===")

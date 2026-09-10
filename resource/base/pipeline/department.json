@@ -61,9 +61,11 @@
         "post_delay": 1200,
         "timeout": 5000,
         "next": [
+            "Department.EnterCombatCard",
             "Department.TabCombat"
         ],
         "on_error": [
+            "Department.EnterCombatCard",
             "Department.TabCombat"
         ]
     },
@@ -82,6 +84,34 @@
         "post_delay": 1200,
         "timeout": 5000,
         "next": [
+            "Department.EnterCombatCard",
+            "Department.TabCombat"
+        ],
+        "on_error": [
+            "Department.EnterCombatCard",
+            "Department.TabCombat"
+        ]
+    },
+    "Department.EnterCombatCard": {
+        "recognition": "OCR",
+        "roi": [
+            150,
+            850,
+            300,
+            200
+        ],
+        "expected": [
+            "战斗部门",
+            "战斗"
+        ],
+        "action": "Click",
+        "post_delay": 1200,
+        "next": [
+            "Department.TabCombat",
+            "Department.ScanFreeItem",
+            "Department.ScanQuotaItem"
+        ],
+        "on_error": [
             "Department.TabCombat"
         ]
     },
@@ -126,6 +156,7 @@
         "next": [
             "Department.ScanFreeItem",
             "Department.ScanQuotaItem",
+            "Department.CheckLocked",
             "Department.TabMedical"
         ],
         "on_error": [
@@ -149,6 +180,7 @@
         "next": [
             "Department.ScanFreeItem",
             "Department.ScanQuotaItem",
+            "Department.CheckLocked",
             "Department.TabMedical"
         ]
     },
@@ -169,6 +201,7 @@
         "next": [
             "Department.ScanFreeItem",
             "Department.ScanQuotaItem",
+            "Department.CheckLocked",
             "Department.TabLogistics"
         ],
         "on_error": [
@@ -192,6 +225,7 @@
         "next": [
             "Department.ScanFreeItem",
             "Department.ScanQuotaItem",
+            "Department.CheckLocked",
             "Department.TabLogistics"
         ]
     },
@@ -212,6 +246,7 @@
         "next": [
             "Department.ScanFreeItem",
             "Department.ScanQuotaItem",
+            "Department.CheckLocked",
             "Department.TabTactical"
         ],
         "on_error": [
@@ -235,6 +270,7 @@
         "next": [
             "Department.ScanFreeItem",
             "Department.ScanQuotaItem",
+            "Department.CheckLocked",
             "Department.TabTactical"
         ]
     },
@@ -255,6 +291,7 @@
         "next": [
             "Department.ScanFreeItem",
             "Department.ScanQuotaItem",
+            "Department.CheckLocked",
             "Department.TabRD"
         ],
         "on_error": [
@@ -278,6 +315,7 @@
         "next": [
             "Department.ScanFreeItem",
             "Department.ScanQuotaItem",
+            "Department.CheckLocked",
             "Department.TabRD"
         ]
     },
@@ -298,9 +336,11 @@
         "next": [
             "Department.ScanFreeItem",
             "Department.ScanQuotaItem",
+            "Department.CheckLocked",
             "Department.ReturnToLobby"
         ],
         "on_error": [
+            "Department.CheckLocked",
             "Department.ReturnToLobby"
         ]
     },
@@ -321,6 +361,7 @@
         "next": [
             "Department.ScanFreeItem",
             "Department.ScanQuotaItem",
+            "Department.CheckLocked",
             "Department.ReturnToLobby"
         ]
     },
@@ -556,14 +597,17 @@
             1250
         ],
         "expected": [
-            "解锁条件",
+            "行动等级",
             "等级解锁",
+            "解锁条件",
+            "解锁",
             "暂未开放"
         ],
         "action": "DoNothing",
         "next": [
             "Department.SkipLockedSector"
-        ]
+        ],
+        "max_hit": 5
     },
     "Department.SkipLockedSector": {
         "action": "DoNothing",
@@ -573,7 +617,8 @@
             "Department.TabTactical",
             "Department.TabRD",
             "Department.ReturnToLobby"
-        ]
+        ],
+        "max_hit": 5
     },
     "Department.ReturnToLobby": {
         "recognition": "OCR",
@@ -616,7 +661,8 @@
             "Department.ReturnToLobby",
             "Startup.CheckLobby",
             "Department.EscReturn"
-        ]
+        ],
+        "max_hit": 3
     },
     "Department.EscReturn": {
         "action": "ClickKey",
