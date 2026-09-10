@@ -11,3 +11,6 @@ debug/
 .agents/*
 !.agents/skills/
 resource/base/image/live_test_department/
+libs/
+plugins/
+runtimes/
