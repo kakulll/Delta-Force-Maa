@@ -11,15 +11,13 @@
     "Trading.EnterTrading": {
         "recognition": "OCR",
         "roi": [
-            200,
-            0,
-            880,
-            200
+            570,
+            20,
+            110,
+            60
         ],
         "expected": [
-            "交易行",
-            "拍卖行",
-            "市场"
+            "交易行"
         ],
         "action": "Click",
         "post_delay": 1200,
