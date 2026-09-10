@@ -3,8 +3,8 @@
         "action": "DoNothing",
         "next": [
             "Trading.EnterTrading",
-            "Trading.SelectFirstFavorite",
             "Trading.CheckTradingOpen",
+            "Trading.SelectFirstFavorite",
             "Startup.CheckLobby"
         ]
     },
@@ -24,6 +24,7 @@
         "next": [
             "Trading.CheckTradingOpen",
             "Trading.SelectFavoriteTab",
+            "Trading.SelectCategoryConsumables",
             "Trading.SelectFirstFavorite"
         ]
     },
@@ -43,6 +44,7 @@
         "action": "DoNothing",
         "next": [
             "Trading.SelectFavoriteTab",
+            "Trading.CheckEmptyFavorite",
             "Trading.SelectFirstFavorite"
         ]
     },
@@ -60,6 +62,100 @@
         "action": "Click",
         "post_delay": 800,
         "next": [
+            "Trading.CheckEmptyFavorite",
+            "Trading.SelectFirstFavorite"
+        ]
+    },
+    "Trading.CheckEmptyFavorite": {
+        "recognition": "OCR",
+        "roi": [
+            1100,
+            850,
+            800,
+            100
+        ],
+        "expected": [
+            "暂时没有收藏道具",
+            "加入收藏"
+        ],
+        "action": "Click",
+        "target": [
+            173,
+            818,
+            50,
+            25
+        ],
+        "post_delay": 800,
+        "next": [
+            "Trading.SelectFirstFavorite"
+        ]
+    },
+    "Trading.SelectCategoryConsumables": {
+        "recognition": "OCR",
+        "roi": [
+            100,
+            780,
+            150,
+            80
+        ],
+        "expected": [
+            "消耗品"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "Trading.SelectFirstFavorite"
+        ]
+    },
+    "Trading.SelectCategoryAmmo": {
+        "recognition": "OCR",
+        "roi": [
+            100,
+            610,
+            150,
+            80
+        ],
+        "expected": [
+            "弹药"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "Trading.SelectFirstFavorite"
+        ]
+    },
+    "Trading.ClickSearchBox": {
+        "recognition": "OCR",
+        "roi": [
+            100,
+            200,
+            300,
+            70
+        ],
+        "expected": [
+            "请输入想要查找的商品",
+            "查找",
+            "商品"
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "Trading.InputSearchKeyword"
+        ]
+    },
+    "Trading.InputSearchKeyword": {
+        "action": "InputText",
+        "input_text": "医疗箱",
+        "post_delay": 600,
+        "next": [
+            "Trading.ConfirmSearch"
+        ]
+    },
+    "Trading.ConfirmSearch": {
+        "action": "ClickKey",
+        "key": 13,
+        "post_delay": 1000,
+        "next": [
             "Trading.SelectFirstFavorite"
         ]
     },
@@ -74,7 +170,7 @@
         "post_delay": 600,
         "next": [
             "Trading.EvaluatePrice",
-            "Trading.ClickBuyDirect",
+            "Trading.CloseDrawer",
             "Trading.AntiLagRefresh"
         ]
     },
@@ -120,7 +216,8 @@
         },
         "action": "DoNothing",
         "next": [
-            "Trading.ClickBuyDirect"
+            "Trading.ClickBuyDirect",
+            "Trading.CloseDrawer"
         ]
     },
     "Trading.ClickBuyDirect": {
@@ -131,11 +228,11 @@
             100,
             40
         ],
-        "post_delay": 300,
+        "post_delay": 400,
         "next": [
             "Trading.SelectMaxQuantity",
             "Trading.ConfirmBuyDialog",
-            "Trading.AntiLagRefresh"
+            "Trading.CloseDrawer"
         ]
     },
     "Trading.SelectMaxQuantity": {
@@ -167,7 +264,94 @@
         "action": "Click",
         "post_delay": 600,
         "next": [
+            "Trading.CheckPurchaseSuccess",
+            "Trading.CheckPurchaseSoldOut",
+            "Trading.CheckInsufficientFunds",
             "CommonClosePopup",
+            "Trading.CloseDrawer",
+            "Trading.AntiLagRefresh"
+        ]
+    },
+    "Trading.CheckPurchaseSuccess": {
+        "recognition": "OCR",
+        "roi": [
+            700,
+            600,
+            1160,
+            400
+        ],
+        "expected": [
+            "购买成功",
+            "获得物品",
+            "已存入仓库",
+            "交易成功"
+        ],
+        "action": "DoNothing",
+        "post_delay": 500,
+        "next": [
+            "CommonClosePopup",
+            "Trading.CloseDrawer",
+            "Trading.CloseTrading"
+        ]
+    },
+    "Trading.CheckPurchaseSoldOut": {
+        "recognition": "OCR",
+        "roi": [
+            700,
+            600,
+            1160,
+            400
+        ],
+        "expected": [
+            "已被购买",
+            "已下架",
+            "售罄",
+            "状态已改变",
+            "不存在"
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "CommonClosePopup",
+            "Trading.CloseDrawer",
+            "Trading.AntiLagRefresh"
+        ]
+    },
+    "Trading.CheckInsufficientFunds": {
+        "recognition": "OCR",
+        "roi": [
+            700,
+            600,
+            1160,
+            400
+        ],
+        "expected": [
+            "余额不足",
+            "哈克币不足",
+            "三角券不足"
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "CommonClosePopup",
+            "Trading.CloseTrading",
+            "Startup.CheckLobby"
+        ]
+    },
+    "Trading.CloseDrawer": {
+        "recognition": "OCR",
+        "roi": [
+            150,
+            1530,
+            150,
+            60
+        ],
+        "expected": [
+            "返回"
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
             "Trading.AntiLagRefresh",
             "Trading.SelectFirstFavorite"
         ]
@@ -180,7 +364,7 @@
             30,
             30
         ],
-        "post_delay": 400,
+        "post_delay": 800,
         "next": [
             "Trading.SelectFirstFavorite",
             "Trading.CloseTrading"
@@ -189,14 +373,14 @@
     "Trading.CloseTrading": {
         "recognition": "OCR",
         "roi": [
-            150,
-            1530,
-            150,
+            180,
+            40,
+            160,
             60
         ],
         "expected": [
-            "返回",
-            "开始游戏"
+            "开始游戏",
+            "返回"
         ],
         "action": "Click",
         "post_delay": 800,

@@ -22,10 +22,13 @@ def parse_params(raw: str | None, *required_keys: str) -> dict[str, Any]:
         if required_keys:
             raise ValueError(f"missing required params: {list(required_keys)}")
         return {}
-    try:
-        params = json.loads(raw)
-    except json.JSONDecodeError as e:
-        raise ValueError(f"invalid JSON params: {e}") from e
+    if isinstance(raw, dict):
+        params = raw
+    else:
+        try:
+            params = json.loads(raw)
+        except json.JSONDecodeError as e:
+            raise ValueError(f"invalid JSON params: {e}") from e
     if params is None:
         # MaaFW passes a literal "null" string when a node omits custom_*_param; treat it as absent.
         if required_keys:

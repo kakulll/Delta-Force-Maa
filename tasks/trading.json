@@ -1,5 +1,50 @@
 {
     "option": {
+        "TradingTargetModeOption": {
+            "type": "select",
+            "label": "采购目标模式",
+            "description": "选择交易行采购的目标品类或列表",
+            "default_case": "ModeFavorites",
+            "cases": [
+                {
+                    "name": "ModeFavorites",
+                    "label": "我的收藏（推荐，监控收藏列表）",
+                    "pipeline_override": {
+                        "Trading.CheckTradingOpen": {
+                            "next": [
+                                "Trading.SelectFavoriteTab",
+                                "Trading.CheckEmptyFavorite",
+                                "Trading.SelectFirstFavorite"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "ModeConsumables",
+                    "label": "消耗品专区（医疗箱/止疼药/急救包）",
+                    "pipeline_override": {
+                        "Trading.CheckTradingOpen": {
+                            "next": [
+                                "Trading.SelectCategoryConsumables",
+                                "Trading.SelectFirstFavorite"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "ModeAmmo",
+                    "label": "弹药专区（各型号子弹）",
+                    "pipeline_override": {
+                        "Trading.CheckTradingOpen": {
+                            "next": [
+                                "Trading.SelectCategoryAmmo",
+                                "Trading.SelectFirstFavorite"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
         "TradingMaxPriceOption": {
             "type": "select",
             "label": "最高购买限价（预算）",
@@ -7,8 +52,19 @@
             "default_case": "Price5w",
             "cases": [
                 {
+                    "name": "Price1w",
+                    "label": "10,000 (极速捡漏)",
+                    "pipeline_override": {
+                        "Trading.EvaluatePrice": {
+                            "custom_recognition_param": {
+                                "max_price": 10000
+                            }
+                        }
+                    }
+                },
+                {
                     "name": "Price3w",
-                    "label": "30,000 (极低价极限捡漏)",
+                    "label": "30,000 (超值捡漏)",
                     "pipeline_override": {
                         "Trading.EvaluatePrice": {
                             "custom_recognition_param": {
@@ -36,6 +92,60 @@
                             "custom_recognition_param": {
                                 "max_price": 100000
                             }
+                        }
+                    }
+                },
+                {
+                    "name": "Price20w",
+                    "label": "200,000 (大额物资)",
+                    "pipeline_override": {
+                        "Trading.EvaluatePrice": {
+                            "custom_recognition_param": {
+                                "max_price": 200000
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "PriceUnlimited",
+                    "label": "不限预算 (买入即可)",
+                    "pipeline_override": {
+                        "Trading.EvaluatePrice": {
+                            "custom_recognition_param": {
+                                "max_price": 99999999
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        "TradingPurchaseAction": {
+            "type": "select",
+            "label": "购买操作模式",
+            "description": "控制是否真正下单购买或仅执行价格监控",
+            "default_case": "RealBuy",
+            "cases": [
+                {
+                    "name": "RealBuy",
+                    "label": "实际购买（自动执行购买与二次确认）",
+                    "pipeline_override": {
+                        "Trading.ClickBuyDirect": {
+                            "enabled": true
+                        },
+                        "Trading.ConfirmBuyDialog": {
+                            "enabled": true
+                        }
+                    }
+                },
+                {
+                    "name": "DryRun",
+                    "label": "仅价格监控（安全模式，不消耗哈克币）",
+                    "pipeline_override": {
+                        "Trading.ClickBuyDirect": {
+                            "enabled": false
+                        },
+                        "Trading.ConfirmBuyDialog": {
+                            "enabled": false
                         }
                     }
                 }
@@ -74,7 +184,9 @@
             "label": "交易行自动捡漏与采购",
             "entry": "Trading.Start",
             "option": [
+                "TradingTargetModeOption",
                 "TradingMaxPriceOption",
+                "TradingPurchaseAction",
                 "TradingAutoMaxQuantity"
             ]
         }

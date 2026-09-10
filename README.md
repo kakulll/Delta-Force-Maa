@@ -14,8 +14,8 @@
   - 各工作台制造产物一键收获。
   - 发电机自动检测与燃料补充。
 - **🛒 交易行自动捡漏与采购 (`Trading`)**：
-  - 基于 MaaFramework 原生 OCR 替换规则与自定义识别器，实时监控并自动采购。
-  - 支持 GUI 动态配置最高购入限价与是否自动拉满购买数量。
+  - 基于 MaaFramework 原生 ONNX OCR 动态定位与 Python 自定义价格评估器，实时监控并自动采购。
+  - 支持 GUI 动态配置品类模式（收藏夹监控/消耗品/弹药）、最高购买限价（1w~20w/不限）、安全监控模式（DryRun，只报警不下单）及数量拉满。
 - **🛠️ 扩展与 Maa 社区规范**：
   - 内置 Python Agent 自定义运行时，无缝扩展复杂物品识别。
   - 深度遵循 MaaHub 与 MaaFramework 协议规范，开箱即用。
@@ -26,7 +26,7 @@
 
 1. **操作系统**：Windows 10 / 11 64位
 2. **游戏客户端**：《三角洲行动》官方 PC 客户端
-3. **分辨率推荐**：1920×1080 或 1280×720（16:9 比例无黑边）
+3. **分辨率支持**：原生适配 2560×1600 (16:10 黄金比例) 与 1920×1080 (16:9)，原生高 DPI 自适应缩放与 ONNX OCR 几何中心点击。
 4. **运行工具**：
    - 方式 A（GUI 推荐）：使用 [MFA (MaaFramework Assistant)](https://github.com/MaaXYZ/MFA) 或 MaaX，直接载入本项目根目录。
    - 方式 B（命令行/Python）：运行 `python agent/bootstrap.py`。
@@ -45,8 +45,9 @@ Delta-Force-Maa/
 │       ├── common.json      # 公共弹窗与返回节点
 │       ├── startup.json     # 启动与进入大厅
 │       ├── daily.json       # 每日邮件与通行证
-│       └── shelter.json     # 特勤处基建收料
-├── tasks/                   # GUI 任务入口配置 (Startup, Daily, Shelter)
+│       ├── shelter.json     # 特勤处基建收料
+│       └── trading.json     # 交易行自动捡漏与采购
+├── tasks/                   # GUI 任务入口配置 (Startup, Daily, Shelter, Trading)
 ├── interface.json           # MaaFramework GUI 接口定义 (仅启用 Win32 PC 端)
 ├── maa-project.json         # 项目元数据与构建配置
 └── AGENTS.md                # 自动化开发与 Git 提交规范
