@@ -1,0 +1,497 @@
+{
+    "option": {
+        "LoadoutPresetOption": {
+            "type": "select",
+            "label": "战前配装预设方案",
+            "description": "选择一键自动穿戴的成套战备预设方案（突击/侦察/轻装）",
+            "default_case": "PresetAssault",
+            "cases": [
+                {
+                    "name": "PresetAssault",
+                    "label": "突击方案 (高防重甲头胸 + 30格背包 + 全套医疗)",
+                    "description": "高防护重甲配置，适合正面交火与要点攻坚",
+                    "pipeline_override": {
+                        "Loadout.SelectPreset": {
+                            "expected": [
+                                "突击方案",
+                                "突击",
+                                "重装突击"
+                            ]
+                        },
+                        "Loadout.CheckStashHelmet": {
+                            "expected": [
+                                "全防头盔",
+                                "5级头盔",
+                                "重装头盔"
+                            ]
+                        },
+                        "Loadout.CheckStashArmor": {
+                            "expected": [
+                                "重装防弹衣",
+                                "5级防弹衣",
+                                "突击防弹衣"
+                            ]
+                        },
+                        "Loadout.CheckStashChestRig": {
+                            "expected": [
+                                "突击胸挂",
+                                "4级胸挂",
+                                "重型胸挂"
+                            ]
+                        },
+                        "Loadout.CheckStashBackpack": {
+                            "expected": [
+                                "战术大背包",
+                                "30格背包",
+                                "大背包"
+                            ]
+                        },
+                        "Loadout.CheckStashMeds": {
+                            "expected": [
+                                "全套手术包",
+                                "高级医疗包",
+                                "急救包"
+                            ]
+                        },
+                        "Loadout.SearchMissingItemInput": {
+                            "input_text": "全防头盔"
+                        }
+                    }
+                },
+                {
+                    "name": "PresetRecon",
+                    "label": "侦察方案 (高机动轻甲 + 战术侦察头 + 中背包 + 兴奋剂)",
+                    "description": "高机动高感知配置，适合中远距离游击与侦察定位",
+                    "pipeline_override": {
+                        "Loadout.SelectPreset": {
+                            "expected": [
+                                "侦察方案",
+                                "侦察",
+                                "战术侦察"
+                            ]
+                        },
+                        "Loadout.CheckStashHelmet": {
+                            "expected": [
+                                "战术侦察头盔",
+                                "4级头盔",
+                                "轻量头盔"
+                            ]
+                        },
+                        "Loadout.CheckStashArmor": {
+                            "expected": [
+                                "高机动防弹衣",
+                                "4级防弹衣",
+                                "轻甲"
+                            ]
+                        },
+                        "Loadout.CheckStashChestRig": {
+                            "expected": [
+                                "侦察胸挂",
+                                "轻型胸挂",
+                                "战术胸挂"
+                            ]
+                        },
+                        "Loadout.CheckStashBackpack": {
+                            "expected": [
+                                "中型战术背包",
+                                "20格背包",
+                                "便携背包"
+                            ]
+                        },
+                        "Loadout.CheckStashMeds": {
+                            "expected": [
+                                "敏捷兴奋剂",
+                                "医疗针",
+                                "便携医疗包"
+                            ]
+                        },
+                        "Loadout.SearchMissingItemInput": {
+                            "input_text": "战术侦察头盔"
+                        }
+                    }
+                },
+                {
+                    "name": "PresetLightweight",
+                    "label": "轻装方案 (经济防弹衣 + 基础轻便头 + 便携背包 + 止痛)",
+                    "description": "经济跑刀低成本配置，适合快速搜资与低风险撤离",
+                    "pipeline_override": {
+                        "Loadout.SelectPreset": {
+                            "expected": [
+                                "轻装方案",
+                                "轻装",
+                                "基础轻装"
+                            ]
+                        },
+                        "Loadout.CheckStashHelmet": {
+                            "expected": [
+                                "基础轻便头盔",
+                                "3级头盔",
+                                "轻便头盔"
+                            ]
+                        },
+                        "Loadout.CheckStashArmor": {
+                            "expected": [
+                                "经济防弹衣",
+                                "3级防弹衣",
+                                "轻型防弹衣"
+                            ]
+                        },
+                        "Loadout.CheckStashChestRig": {
+                            "expected": [
+                                "便携胸挂",
+                                "基础胸挂",
+                                "轻便胸挂"
+                            ]
+                        },
+                        "Loadout.CheckStashBackpack": {
+                            "expected": [
+                                "便携小背包",
+                                "基础背包",
+                                "小背包"
+                            ]
+                        },
+                        "Loadout.CheckStashMeds": {
+                            "expected": [
+                                "简易止痛药",
+                                "急救绷带",
+                                "基础止痛"
+                            ]
+                        },
+                        "Loadout.SearchMissingItemInput": {
+                            "input_text": "基础轻便头盔"
+                        }
+                    }
+                }
+            ]
+        },
+        "LoadoutPresetSelectOption": {
+            "type": "select",
+            "label": "战前配装预设方案",
+            "description": "选择一键自动穿戴的成套战备预设方案",
+            "default_case": "PresetAssault",
+            "cases": [
+                {
+                    "name": "PresetAssault",
+                    "label": "突击方案 (高防重甲头胸 + 30格背包 + 全套医疗)",
+                    "description": "高防护重甲配置，适合正面交火与要点攻坚",
+                    "pipeline_override": {
+                        "Loadout.SelectPreset": {
+                            "expected": [
+                                "突击方案",
+                                "突击",
+                                "重装突击"
+                            ]
+                        },
+                        "Loadout.CheckStashHelmet": {
+                            "expected": [
+                                "全防头盔",
+                                "5级头盔",
+                                "重装头盔"
+                            ]
+                        },
+                        "Loadout.CheckStashArmor": {
+                            "expected": [
+                                "重装防弹衣",
+                                "5级防弹衣",
+                                "突击防弹衣"
+                            ]
+                        },
+                        "Loadout.CheckStashChestRig": {
+                            "expected": [
+                                "突击胸挂",
+                                "4级胸挂",
+                                "重型胸挂"
+                            ]
+                        },
+                        "Loadout.CheckStashBackpack": {
+                            "expected": [
+                                "战术大背包",
+                                "30格背包",
+                                "大背包"
+                            ]
+                        },
+                        "Loadout.CheckStashMeds": {
+                            "expected": [
+                                "全套手术包",
+                                "高级医疗包",
+                                "急救包"
+                            ]
+                        },
+                        "Loadout.SearchMissingItemInput": {
+                            "input_text": "全防头盔"
+                        }
+                    }
+                },
+                {
+                    "name": "PresetRecon",
+                    "label": "侦察方案 (高机动轻甲 + 战术侦察头 + 中背包 + 兴奋剂)",
+                    "description": "高机动高感知配置，适合中远距离游击与侦察定位",
+                    "pipeline_override": {
+                        "Loadout.SelectPreset": {
+                            "expected": [
+                                "侦察方案",
+                                "侦察",
+                                "战术侦察"
+                            ]
+                        },
+                        "Loadout.CheckStashHelmet": {
+                            "expected": [
+                                "战术侦察头盔",
+                                "4级头盔",
+                                "轻量头盔"
+                            ]
+                        },
+                        "Loadout.CheckStashArmor": {
+                            "expected": [
+                                "高机动防弹衣",
+                                "4级防弹衣",
+                                "轻甲"
+                            ]
+                        },
+                        "Loadout.CheckStashChestRig": {
+                            "expected": [
+                                "侦察胸挂",
+                                "轻型胸挂",
+                                "战术胸挂"
+                            ]
+                        },
+                        "Loadout.CheckStashBackpack": {
+                            "expected": [
+                                "中型战术背包",
+                                "20格背包",
+                                "便携背包"
+                            ]
+                        },
+                        "Loadout.CheckStashMeds": {
+                            "expected": [
+                                "敏捷兴奋剂",
+                                "医疗针",
+                                "便携医疗包"
+                            ]
+                        },
+                        "Loadout.SearchMissingItemInput": {
+                            "input_text": "战术侦察头盔"
+                        }
+                    }
+                },
+                {
+                    "name": "PresetLightweight",
+                    "label": "轻装方案 (经济防弹衣 + 基础轻便头 + 便携背包 + 止痛)",
+                    "description": "经济跑刀低成本配置，适合快速搜资与低风险撤离",
+                    "pipeline_override": {
+                        "Loadout.SelectPreset": {
+                            "expected": [
+                                "轻装方案",
+                                "轻装",
+                                "基础轻装"
+                            ]
+                        },
+                        "Loadout.CheckStashHelmet": {
+                            "expected": [
+                                "基础轻便头盔",
+                                "3级头盔",
+                                "轻便头盔"
+                            ]
+                        },
+                        "Loadout.CheckStashArmor": {
+                            "expected": [
+                                "经济防弹衣",
+                                "3级防弹衣",
+                                "轻型防弹衣"
+                            ]
+                        },
+                        "Loadout.CheckStashChestRig": {
+                            "expected": [
+                                "便携胸挂",
+                                "基础胸挂",
+                                "轻便胸挂"
+                            ]
+                        },
+                        "Loadout.CheckStashBackpack": {
+                            "expected": [
+                                "便携小背包",
+                                "基础背包",
+                                "小背包"
+                            ]
+                        },
+                        "Loadout.CheckStashMeds": {
+                            "expected": [
+                                "简易止痛药",
+                                "急救绷带",
+                                "基础止痛"
+                            ]
+                        },
+                        "Loadout.SearchMissingItemInput": {
+                            "input_text": "基础轻便头盔"
+                        }
+                    }
+                }
+            ]
+        },
+        "LoadoutAllowTradingBuyOption": {
+            "type": "select",
+            "label": "缺件交易行自动采购",
+            "description": "当仓库无对应预设装备时，是否自动跳转交易行采购补货",
+            "default_case": "Enabled",
+            "cases": [
+                {
+                    "name": "Enabled",
+                    "label": "开启交易行自动采购补货",
+                    "description": "当仓库缺少预设装备时，自动进入交易行搜索并购买最低价装备",
+                    "pipeline_override": {
+                        "Loadout.JumpToTrading": {
+                            "enabled": true
+                        }
+                    }
+                },
+                {
+                    "name": "Disabled",
+                    "label": "关闭交易行采购 (仅取仓库现有库存)",
+                    "description": "当仓库缺少预设装备时，跳过该部件，仅穿戴仓库中现有的装备",
+                    "pipeline_override": {
+                        "Loadout.JumpToTrading": {
+                            "enabled": false
+                        }
+                    }
+                }
+            ]
+        },
+        "LoadoutReplenishOption": {
+            "type": "select",
+            "label": "缺件交易行自动采购",
+            "description": "当仓库无对应预设装备时，是否自动跳转交易行采购补货",
+            "default_case": "Enabled",
+            "cases": [
+                {
+                    "name": "Enabled",
+                    "label": "开启交易行自动采购补货",
+                    "description": "当仓库缺少预设装备时，自动进入交易行搜索并购买最低价装备",
+                    "pipeline_override": {
+                        "Loadout.JumpToTrading": {
+                            "enabled": true
+                        }
+                    }
+                },
+                {
+                    "name": "Disabled",
+                    "label": "关闭交易行采购 (仅取仓库现有库存)",
+                    "description": "当仓库缺少预设装备时，跳过该部件，仅穿戴仓库中现有的装备",
+                    "pipeline_override": {
+                        "Loadout.JumpToTrading": {
+                            "enabled": false
+                        }
+                    }
+                }
+            ]
+        },
+        "LoadoutDryRunOption": {
+            "type": "select",
+            "label": "配装执行模式",
+            "description": "DryRun 安全预览或实战自动穿戴扣费采购",
+            "default_case": "DryRun",
+            "cases": [
+                {
+                    "name": "DryRun",
+                    "label": "DryRun 安全预览模式 (不穿戴/不扣费购买)",
+                    "description": "仅核对槽位与缺件清单，不执行穿戴、取件与交易行扣费购买",
+                    "pipeline_override": {
+                        "Loadout.EquipItem": {
+                            "enabled": false
+                        },
+                        "Loadout.EquipGear": {
+                            "enabled": false
+                        },
+                        "Loadout.RetrieveGear": {
+                            "enabled": false
+                        },
+                        "Loadout.ClickBuyMissing": {
+                            "enabled": false
+                        },
+                        "Loadout.BuyMissingItem": {
+                            "enabled": false
+                        }
+                    }
+                },
+                {
+                    "name": "RealRun",
+                    "label": "RealRun 实战配装模式 (自动穿戴全套装备并扣费补货)",
+                    "description": "自动穿戴仓库匹配装备并在缺件时于交易行自动采购",
+                    "pipeline_override": {
+                        "Loadout.EquipItem": {
+                            "enabled": true
+                        },
+                        "Loadout.EquipGear": {
+                            "enabled": true
+                        },
+                        "Loadout.RetrieveGear": {
+                            "enabled": true
+                        },
+                        "Loadout.ClickBuyMissing": {
+                            "enabled": true
+                        },
+                        "Loadout.BuyMissingItem": {
+                            "enabled": true
+                        }
+                    }
+                },
+                {
+                    "name": "RealAction",
+                    "label": "RealAction 实战配装模式 (自动穿戴全套装备并扣费补货)",
+                    "description": "自动穿戴仓库匹配装备并在缺件时于交易行自动采购",
+                    "pipeline_override": {
+                        "Loadout.EquipItem": {
+                            "enabled": true
+                        },
+                        "Loadout.EquipGear": {
+                            "enabled": true
+                        },
+                        "Loadout.RetrieveGear": {
+                            "enabled": true
+                        },
+                        "Loadout.ClickBuyMissing": {
+                            "enabled": true
+                        },
+                        "Loadout.BuyMissingItem": {
+                            "enabled": true
+                        }
+                    }
+                },
+                {
+                    "name": "RealEquip",
+                    "label": "RealEquip 实战配装模式 (自动穿戴全套装备并扣费补货)",
+                    "description": "自动穿戴仓库匹配装备并在缺件时于交易行自动采购",
+                    "pipeline_override": {
+                        "Loadout.EquipItem": {
+                            "enabled": true
+                        },
+                        "Loadout.EquipGear": {
+                            "enabled": true
+                        },
+                        "Loadout.RetrieveGear": {
+                            "enabled": true
+                        },
+                        "Loadout.ClickBuyMissing": {
+                            "enabled": true
+                        },
+                        "Loadout.BuyMissingItem": {
+                            "enabled": true
+                        }
+                    }
+                }
+            ]
+        }
+    },
+    "task": [
+        {
+            "name": "LoadoutPreset",
+            "label": "战前一键自动配装",
+            "description": "根据预定义装备方案（突击、侦察、轻装），全自动执行仓库取件、缺件交易行自动补货、穿戴头盔/防弹衣/胸挂/背包/药品全流程，支持DryRun安全预览与4级Esc安全回退。",
+            "entry": "Loadout.Start",
+            "option": [
+                "LoadoutPresetOption",
+                "LoadoutAllowTradingBuyOption",
+                "LoadoutDryRunOption"
+            ]
+        }
+    ]
+}

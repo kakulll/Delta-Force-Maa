@@ -1,0 +1,807 @@
+{
+    "Loadout.Start": {
+        "action": "DoNothing",
+        "next": [
+            "Loadout.EnterWarehouse",
+            "Loadout.CheckWarehouseOpened",
+            "Startup.CheckLobby"
+        ],
+        "on_error": [
+            "Loadout.ReturnToLobby"
+        ]
+    },
+    "Loadout.EnterWarehouse": {
+        "recognition": "OCR",
+        "roi": [
+            380,
+            30,
+            100,
+            70
+        ],
+        "expected": [
+            "仓库"
+        ],
+        "action": "Click",
+        "post_delay": 1500,
+        "next": [
+            "Loadout.CheckWarehouseOpened"
+        ],
+        "on_error": [
+            "Loadout.ReturnToLobby"
+        ]
+    },
+    "Loadout.CheckWarehouseOpened": {
+        "recognition": "OCR",
+        "roi": [
+            1540,
+            110,
+            120,
+            60
+        ],
+        "expected": [
+            "仓库"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "Loadout.CheckCharacterPaperdoll",
+            "Loadout.SelectPreset",
+            "Loadout.ScanSlots"
+        ],
+        "on_error": [
+            "Loadout.ReturnToLobby"
+        ]
+    },
+    "Loadout.CheckCharacterPaperdoll": {
+        "recognition": "OCR",
+        "roi": [
+            200,
+            300,
+            800,
+            1000
+        ],
+        "expected": [
+            "装备",
+            "战术装备",
+            "头部",
+            "胸部"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "Loadout.SelectPreset",
+            "Loadout.ScanSlots"
+        ],
+        "on_error": [
+            "Loadout.ReturnToLobby"
+        ]
+    },
+    "Loadout.SelectPreset": {
+        "recognition": "OCR",
+        "roi": [
+            200,
+            200,
+            400,
+            80
+        ],
+        "expected": [
+            "突击方案",
+            "突击",
+            "预设"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "Loadout.ScanSlots",
+            "Loadout.CheckWarehouseStock"
+        ],
+        "on_error": [
+            "Loadout.ScanSlots"
+        ]
+    },
+    "Loadout.ScanSlots": {
+        "action": "DoNothing",
+        "next": [
+            "Loadout.CheckStashFull",
+            "Loadout.InspectHelmetSlot",
+            "Loadout.InspectArmorSlot",
+            "Loadout.InspectChestRigSlot",
+            "Loadout.InspectBackpackSlot",
+            "Loadout.InspectMedsSlot",
+            "Loadout.CheckWarehouseStock",
+            "Loadout.VerifyAllSlotsEquipped"
+        ]
+    },
+    "Loadout.InspectHelmetSlot": {
+        "recognition": "OCR",
+        "roi": [
+            250,
+            350,
+            200,
+            120
+        ],
+        "expected": [
+            "头盔",
+            "头部",
+            "未装备"
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "Loadout.CheckStashHelmet",
+            "Loadout.InspectArmorSlot"
+        ],
+        "on_error": [
+            "Loadout.InspectArmorSlot"
+        ]
+    },
+    "Loadout.InspectArmorSlot": {
+        "recognition": "OCR",
+        "roi": [
+            250,
+            500,
+            200,
+            120
+        ],
+        "expected": [
+            "防弹衣",
+            "胸部",
+            "护甲",
+            "未装备"
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "Loadout.CheckStashArmor",
+            "Loadout.InspectChestRigSlot"
+        ],
+        "on_error": [
+            "Loadout.InspectChestRigSlot"
+        ]
+    },
+    "Loadout.InspectChestRigSlot": {
+        "recognition": "OCR",
+        "roi": [
+            250,
+            650,
+            200,
+            120
+        ],
+        "expected": [
+            "胸挂",
+            "战术胸挂",
+            "弹药挂具",
+            "未装备"
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "Loadout.CheckStashChestRig",
+            "Loadout.InspectBackpackSlot"
+        ],
+        "on_error": [
+            "Loadout.InspectBackpackSlot"
+        ]
+    },
+    "Loadout.InspectBackpackSlot": {
+        "recognition": "OCR",
+        "roi": [
+            250,
+            800,
+            200,
+            120
+        ],
+        "expected": [
+            "背包",
+            "战术背包",
+            "未装备"
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "Loadout.CheckStashBackpack",
+            "Loadout.InspectMedsSlot"
+        ],
+        "on_error": [
+            "Loadout.InspectMedsSlot"
+        ]
+    },
+    "Loadout.InspectMedsSlot": {
+        "recognition": "OCR",
+        "roi": [
+            250,
+            950,
+            200,
+            120
+        ],
+        "expected": [
+            "药品",
+            "医疗包",
+            "急救包",
+            "未装备"
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "Loadout.CheckStashMeds",
+            "Loadout.VerifyAllSlotsEquipped"
+        ],
+        "on_error": [
+            "Loadout.VerifyAllSlotsEquipped"
+        ]
+    },
+    "Loadout.CheckWarehouseStock": {
+        "recognition": "OCR",
+        "roi": [
+            1540,
+            110,
+            300,
+            60
+        ],
+        "expected": [
+            "仓库",
+            "装备",
+            "战术装备"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "Loadout.CheckStashFull",
+            "Loadout.CheckStashHelmet",
+            "Loadout.CheckStashArmor",
+            "Loadout.CheckStashChestRig",
+            "Loadout.CheckStashBackpack",
+            "Loadout.CheckStashMeds",
+            "Loadout.CheckMissingParts"
+        ],
+        "on_error": [
+            "Loadout.CheckMissingParts"
+        ]
+    },
+    "Loadout.CheckStashHelmet": {
+        "recognition": "OCR",
+        "roi": [
+            1500,
+            200,
+            900,
+            600
+        ],
+        "expected": [
+            "全防头盔",
+            "头盔",
+            "战术头盔"
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "Loadout.RetrieveGear",
+            "Loadout.CheckMissingParts"
+        ],
+        "on_error": [
+            "Loadout.CheckMissingParts"
+        ]
+    },
+    "Loadout.CheckStashArmor": {
+        "recognition": "OCR",
+        "roi": [
+            1500,
+            200,
+            900,
+            600
+        ],
+        "expected": [
+            "防弹衣",
+            "重装防弹衣",
+            "突击防弹衣"
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "Loadout.RetrieveGear",
+            "Loadout.CheckMissingParts"
+        ],
+        "on_error": [
+            "Loadout.CheckMissingParts"
+        ]
+    },
+    "Loadout.CheckStashChestRig": {
+        "recognition": "OCR",
+        "roi": [
+            1500,
+            200,
+            900,
+            600
+        ],
+        "expected": [
+            "胸挂",
+            "突击胸挂",
+            "战术胸挂"
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "Loadout.RetrieveGear",
+            "Loadout.CheckMissingParts"
+        ],
+        "on_error": [
+            "Loadout.CheckMissingParts"
+        ]
+    },
+    "Loadout.CheckStashBackpack": {
+        "recognition": "OCR",
+        "roi": [
+            1500,
+            200,
+            900,
+            600
+        ],
+        "expected": [
+            "战术背包",
+            "背包",
+            "大背包"
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "Loadout.RetrieveGear",
+            "Loadout.CheckMissingParts"
+        ],
+        "on_error": [
+            "Loadout.CheckMissingParts"
+        ]
+    },
+    "Loadout.CheckStashMeds": {
+        "recognition": "OCR",
+        "roi": [
+            1500,
+            200,
+            900,
+            600
+        ],
+        "expected": [
+            "高级医疗包",
+            "医疗包",
+            "急救包",
+            "止痛药"
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "Loadout.RetrieveGear",
+            "Loadout.CheckMissingParts"
+        ],
+        "on_error": [
+            "Loadout.CheckMissingParts"
+        ]
+    },
+    "Loadout.RetrieveGear": {
+        "action": "Click",
+        "target": [
+            1650,
+            750,
+            100,
+            80
+        ],
+        "post_delay": 600,
+        "max_hit": 10,
+        "next": [
+            "Loadout.EquipItem",
+            "Loadout.EquipGear",
+            "Loadout.CheckStashFull"
+        ],
+        "on_error": [
+            "Loadout.CheckMissingParts"
+        ]
+    },
+    "Loadout.EquipItem": {
+        "recognition": "OCR",
+        "roi": [
+            2100,
+            1400,
+            200,
+            60
+        ],
+        "expected": [
+            "穿戴",
+            "装备",
+            "一键穿戴"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "max_hit": 10,
+        "next": [
+            "Loadout.EquipGear",
+            "Loadout.VerifyAllSlotsEquipped",
+            "Loadout.CheckStashFull"
+        ],
+        "on_error": [
+            "Loadout.VerifyAllSlotsEquipped"
+        ]
+    },
+    "Loadout.EquipGear": {
+        "recognition": "OCR",
+        "roi": [
+            2100,
+            1400,
+            200,
+            60
+        ],
+        "expected": [
+            "穿戴",
+            "装备",
+            "一键穿戴"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "max_hit": 10,
+        "next": [
+            "Loadout.VerifyAllSlotsEquipped",
+            "Loadout.ReturnToLobby"
+        ],
+        "on_error": [
+            "Loadout.ReturnToLobby"
+        ]
+    },
+    "Loadout.CheckStashFull": {
+        "recognition": "OCR",
+        "roi": [
+            800,
+            600,
+            960,
+            400
+        ],
+        "expected": [
+            "仓库已满",
+            "空间不足",
+            "背包已满",
+            "无法存放"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "CommonClosePopup",
+            "Loadout.ReturnToLobby"
+        ],
+        "on_error": [
+            "Loadout.ReturnToLobby"
+        ]
+    },
+    "Loadout.CheckMissingParts": {
+        "recognition": "OCR",
+        "roi": [
+            1500,
+            200,
+            900,
+            600
+        ],
+        "expected": [
+            "缺件",
+            "未找到",
+            "缺少装备",
+            "无库存"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "Loadout.JumpToTrading",
+            "Loadout.VerifyAllSlotsEquipped"
+        ],
+        "on_error": [
+            "Loadout.VerifyAllSlotsEquipped"
+        ]
+    },
+    "Loadout.JumpToTrading": {
+        "recognition": "OCR",
+        "roi": [
+            880,
+            30,
+            140,
+            80
+        ],
+        "expected": [
+            "交易行"
+        ],
+        "action": "Click",
+        "post_delay": 1500,
+        "max_hit": 5,
+        "next": [
+            "Loadout.CheckTradingHouseOpened"
+        ],
+        "on_error": [
+            "Loadout.ReturnToLobby"
+        ]
+    },
+    "Loadout.CheckTradingHouseOpened": {
+        "recognition": "OCR",
+        "roi": [
+            100,
+            100,
+            350,
+            250
+        ],
+        "expected": [
+            "购买",
+            "出售",
+            "关注"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "Loadout.SelectMissingItemRow",
+            "Loadout.SearchMissingItemBox",
+            "Loadout.CheckMarketOutOfStock"
+        ],
+        "on_error": [
+            "Loadout.ReturnToLobby"
+        ]
+    },
+    "Loadout.SearchMissingItemBox": {
+        "recognition": "OCR",
+        "roi": [
+            100,
+            200,
+            300,
+            70
+        ],
+        "expected": [
+            "请输入想要查找的商品",
+            "查找",
+            "商品"
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "Loadout.SearchMissingItemInput"
+        ],
+        "on_error": [
+            "Loadout.ReturnToWarehouse"
+        ]
+    },
+    "Loadout.SearchMissingItemInput": {
+        "action": "InputText",
+        "input_text": "全防头盔",
+        "post_delay": 500,
+        "next": [
+            "Loadout.ConfirmSearchMissingItem"
+        ]
+    },
+    "Loadout.ConfirmSearchMissingItem": {
+        "action": "ClickKey",
+        "key": 13,
+        "post_delay": 800,
+        "next": [
+            "Loadout.SelectMissingItemRow"
+        ]
+    },
+    "Loadout.SelectMissingItemRow": {
+        "action": "Click",
+        "target": [
+            750,
+            250,
+            100,
+            60
+        ],
+        "post_delay": 500,
+        "next": [
+            "Loadout.ClickBuyMissing",
+            "Loadout.BuyMissingItem",
+            "Loadout.CheckMarketOutOfStock"
+        ]
+    },
+    "Loadout.ClickBuyMissing": {
+        "recognition": "OCR",
+        "roi": [
+            2100,
+            1450,
+            200,
+            60
+        ],
+        "expected": [
+            "直接购买",
+            "购买",
+            "快捷购买"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "max_hit": 5,
+        "next": [
+            "Loadout.ConfirmBuyMissingDialog",
+            "Loadout.CheckMarketOutOfStock"
+        ],
+        "on_error": [
+            "Loadout.CheckMarketOutOfStock"
+        ]
+    },
+    "Loadout.BuyMissingItem": {
+        "recognition": "OCR",
+        "roi": [
+            2100,
+            1450,
+            200,
+            60
+        ],
+        "expected": [
+            "直接购买",
+            "购买",
+            "快捷购买"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "max_hit": 5,
+        "next": [
+            "Loadout.ConfirmBuyMissingDialog",
+            "Loadout.CheckMarketOutOfStock"
+        ],
+        "on_error": [
+            "Loadout.CheckMarketOutOfStock"
+        ]
+    },
+    "Loadout.ConfirmBuyMissingDialog": {
+        "recognition": "OCR",
+        "roi": [
+            800,
+            800,
+            800,
+            300
+        ],
+        "expected": [
+            "确认购买",
+            "确定",
+            "购买"
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "max_hit": 5,
+        "next": [
+            "Loadout.CheckBuySuccess",
+            "Loadout.CheckMarketOutOfStock"
+        ],
+        "on_error": [
+            "Loadout.CheckMarketOutOfStock"
+        ]
+    },
+    "Loadout.CheckBuySuccess": {
+        "recognition": "OCR",
+        "roi": [
+            800,
+            600,
+            960,
+            400
+        ],
+        "expected": [
+            "购买成功",
+            "获得物品",
+            "已存入仓库"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "CommonClosePopup",
+            "Loadout.ReturnToWarehouse"
+        ],
+        "on_error": [
+            "Loadout.ReturnToWarehouse"
+        ]
+    },
+    "Loadout.CheckMarketOutOfStock": {
+        "recognition": "OCR",
+        "roi": [
+            800,
+            600,
+            960,
+            400
+        ],
+        "expected": [
+            "售罄",
+            "已售罄",
+            "商品已下架",
+            "库存不足",
+            "暂无商品"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "CommonClosePopup",
+            "Loadout.ReturnToLobby",
+            "Loadout.ReturnToWarehouse"
+        ],
+        "on_error": [
+            "Loadout.ReturnToWarehouse"
+        ]
+    },
+    "Loadout.ReturnToWarehouse": {
+        "recognition": "OCR",
+        "roi": [
+            380,
+            30,
+            100,
+            70
+        ],
+        "expected": [
+            "仓库"
+        ],
+        "action": "Click",
+        "post_delay": 1500,
+        "max_hit": 5,
+        "next": [
+            "Loadout.EquipItem",
+            "Loadout.CheckWarehouseOpened"
+        ],
+        "on_error": [
+            "Loadout.ReturnToLobby"
+        ]
+    },
+    "Loadout.VerifyAllSlotsEquipped": {
+        "recognition": "OCR",
+        "roi": [
+            200,
+            300,
+            800,
+            1000
+        ],
+        "expected": [
+            "配装完成",
+            "已装备",
+            "全套就绪",
+            "头部",
+            "胸部"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "Loadout.ReturnToLobby"
+        ],
+        "on_error": [
+            "Loadout.ReturnToLobby"
+        ]
+    },
+    "Loadout.ReturnToLobby": {
+        "recognition": "OCR",
+        "roi": [
+            180,
+            40,
+            160,
+            60
+        ],
+        "expected": [
+            "开始游戏",
+            "返回"
+        ],
+        "action": "Click",
+        "post_delay": 1200,
+        "next": [
+            "Startup.CheckLobby",
+            "Loadout.SubpageReturn"
+        ],
+        "on_error": [
+            "Loadout.SubpageReturn"
+        ]
+    },
+    "Loadout.SubpageReturn": {
+        "recognition": "OCR",
+        "roi": [
+            120,
+            1520,
+            120,
+            70
+        ],
+        "expected": [
+            "返回",
+            "Esc",
+            "ESC"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "max_hit": 3,
+        "next": [
+            "Startup.CheckLobby",
+            "Loadout.EscReturn"
+        ],
+        "on_error": [
+            "Loadout.EscReturn"
+        ]
+    },
+    "Loadout.EscReturn": {
+        "action": "ClickKey",
+        "key": 27,
+        "post_delay": 800,
+        "max_hit": 3,
+        "next": [
+            "Startup.CheckLobby"
+        ],
+        "on_error": [
+            "Startup.CheckLobby"
+        ]
+    }
+}
