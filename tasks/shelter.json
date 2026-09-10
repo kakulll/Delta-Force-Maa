@@ -1,9 +1,199 @@
 {
+    "option": {
+        "ShelterRoutineOption": {
+            "type": "select",
+            "label": "特勤处维护例程策略",
+            "description": "选择特勤处自动维护的执行范围：全量例程、仅靶场打靶、仅干员训练经验、仅制造收获",
+            "default_case": "FullRoutine",
+            "cases": [
+                {
+                    "name": "FullRoutine",
+                    "label": "全量维护例程 (FullRoutine)",
+                    "description": "依次执行制造区收获、靶场打靶日常、干员训练经验领取与发电机检查补油全流程",
+                    "pipeline_override": {
+                        "Shelter.ClaimCraftedItems": {
+                            "enabled": true
+                        },
+                        "Shelter.EnterShootingRange": {
+                            "enabled": true
+                        },
+                        "Shelter.EnterTrainingCenter": {
+                            "enabled": true
+                        },
+                        "Shelter.CheckGenerator": {
+                            "enabled": true
+                        }
+                    }
+                },
+                {
+                    "name": "ShootingOnly",
+                    "label": "仅靶场打靶 (ShootingOnly)",
+                    "description": "仅执行靶场打靶日常任务并领取打靶奖励，跳过制造收获与干员训练",
+                    "pipeline_override": {
+                        "Shelter.ClaimCraftedItems": {
+                            "enabled": false
+                        },
+                        "Shelter.EnterShootingRange": {
+                            "enabled": true
+                        },
+                        "Shelter.EnterTrainingCenter": {
+                            "enabled": false
+                        },
+                        "Shelter.CheckGenerator": {
+                            "enabled": false
+                        }
+                    }
+                },
+                {
+                    "name": "TrainingOnly",
+                    "label": "仅干员训练经验 (TrainingOnly)",
+                    "description": "仅进入训练中心领取干员经验加速奖励并重新派遣，跳过靶场打靶与制造收获",
+                    "pipeline_override": {
+                        "Shelter.ClaimCraftedItems": {
+                            "enabled": false
+                        },
+                        "Shelter.EnterShootingRange": {
+                            "enabled": false
+                        },
+                        "Shelter.EnterTrainingCenter": {
+                            "enabled": true
+                        },
+                        "Shelter.CheckGenerator": {
+                            "enabled": false
+                        }
+                    }
+                },
+                {
+                    "name": "HarvestOnly",
+                    "label": "仅制造区收获 (HarvestOnly)",
+                    "description": "仅一键收获特勤处制造站产物，跳过靶场打靶与干员训练",
+                    "pipeline_override": {
+                        "Shelter.ClaimCraftedItems": {
+                            "enabled": true
+                        },
+                        "Shelter.EnterShootingRange": {
+                            "enabled": false
+                        },
+                        "Shelter.EnterTrainingCenter": {
+                            "enabled": false
+                        },
+                        "Shelter.CheckGenerator": {
+                            "enabled": false
+                        }
+                    }
+                }
+            ]
+        },
+        "ShelterRefuelOption": {
+            "type": "select",
+            "label": "发电机自动补油开关",
+            "description": "控制是否自动进入动力室为发电机补充燃油",
+            "default_case": "Enabled",
+            "cases": [
+                {
+                    "name": "Enabled",
+                    "label": "开启发电机补油 (Enabled)",
+                    "description": "自动进入动力室检查发电机燃油状态并快速补充燃油",
+                    "pipeline_override": {
+                        "Shelter.CheckGenerator": {
+                            "enabled": true
+                        },
+                        "Shelter.Refuel": {
+                            "enabled": true
+                        }
+                    }
+                },
+                {
+                    "name": "Disabled",
+                    "label": "关闭发电机补油 (Disabled)",
+                    "description": "跳过发电机检查与燃油补充动作",
+                    "pipeline_override": {
+                        "Shelter.CheckGenerator": {
+                            "enabled": false
+                        },
+                        "Shelter.Refuel": {
+                            "enabled": false
+                        }
+                    }
+                }
+            ]
+        },
+        "ShelterDryRunOption": {
+            "type": "select",
+            "label": "特勤处执行模式 (DryRun vs RealRun)",
+            "description": "安全预览模式或真实执行模式。DryRun 模式下禁用所有收获、打靶消耗、经验领取及燃料添加动作，仅做导航巡检后安全退出",
+            "default_case": "DryRun",
+            "cases": [
+                {
+                    "name": "DryRun",
+                    "label": "安全预览模式 (DryRun 零消耗/零交互)",
+                    "description": "执行设施导航与状态检测，禁用全部实质交互与消耗动作，安全路由退回大厅",
+                    "pipeline_override": {
+                        "Shelter.ClaimCraftedItems": {
+                            "enabled": false
+                        },
+                        "Shelter.Refuel": {
+                            "enabled": false
+                        },
+                        "Shelter.ExecuteTargetPractice": {
+                            "enabled": false
+                        },
+                        "Shelter.StartShootingRoutine": {
+                            "enabled": false
+                        },
+                        "Shelter.ClaimOperatorXP": {
+                            "enabled": false
+                        },
+                        "Shelter.ClaimOperatorExp": {
+                            "enabled": false
+                        },
+                        "Shelter.ClaimShootingReward": {
+                            "enabled": false
+                        }
+                    }
+                },
+                {
+                    "name": "RealRun",
+                    "label": "实战执行模式 (RealRun 自动完成全流程)",
+                    "description": "自动点击执行收获、开始打靶挑战、领取干员经验与补充燃料",
+                    "pipeline_override": {
+                        "Shelter.ClaimCraftedItems": {
+                            "enabled": true
+                        },
+                        "Shelter.Refuel": {
+                            "enabled": true
+                        },
+                        "Shelter.ExecuteTargetPractice": {
+                            "enabled": true
+                        },
+                        "Shelter.StartShootingRoutine": {
+                            "enabled": true
+                        },
+                        "Shelter.ClaimOperatorXP": {
+                            "enabled": true
+                        },
+                        "Shelter.ClaimOperatorExp": {
+                            "enabled": true
+                        },
+                        "Shelter.ClaimShootingReward": {
+                            "enabled": true
+                        }
+                    }
+                }
+            ]
+        }
+    },
     "task": [
         {
             "name": "Shelter",
-            "label": "特勤处自动收菜与补油",
-            "entry": "Shelter.Start"
+            "label": "特勤处常驻收菜与日常维护",
+            "description": "自动执行特勤处日常运维任务：靶场打靶日常（含0/3限次跳过）、干员训练经验加速领取、制造区产物收获与发电机补油，支持DryRun安全预览与4级Esc安全回退。",
+            "entry": "Shelter.Start",
+            "option": [
+                "ShelterRoutineOption",
+                "ShelterRefuelOption",
+                "ShelterDryRunOption"
+            ]
         }
     ]
 }

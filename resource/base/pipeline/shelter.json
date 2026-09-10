@@ -3,6 +3,7 @@
         "action": "DoNothing",
         "next": [
             "Shelter.EnterDepartment",
+            "Shelter.CheckShelterMain",
             "Shelter.ClaimCraftedItems",
             "Startup.CheckLobby"
         ]
@@ -21,8 +22,36 @@
         "action": "Click",
         "post_delay": 1500,
         "next": [
+            "Shelter.CheckShelterMain",
             "Shelter.ClaimCraftedItems",
+            "Shelter.EnterShootingRange",
+            "Shelter.EnterTrainingCenter",
             "Shelter.CheckGenerator",
+            "Shelter.ReturnToLobby",
+            "Shelter.ReturnLobby"
+        ]
+    },
+    "Shelter.CheckShelterMain": {
+        "recognition": "OCR",
+        "roi": [
+            100,
+            100,
+            600,
+            150
+        ],
+        "expected": [
+            "特勤处",
+            "制造",
+            "靶场",
+            "训练中心"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "Shelter.ClaimCraftedItems",
+            "Shelter.EnterShootingRange",
+            "Shelter.EnterTrainingCenter",
+            "Shelter.CheckGenerator",
+            "Shelter.ReturnToLobby",
             "Shelter.ReturnLobby"
         ]
     },
@@ -41,10 +70,387 @@
         ],
         "action": "Click",
         "post_delay": 1000,
+        "max_hit": 5,
         "next": [
             "CommonClosePopup",
+            "Shelter.EnterShootingRange",
+            "Shelter.EnterTrainingCenter",
             "Shelter.CheckGenerator",
+            "Shelter.ReturnToLobby",
             "Shelter.ReturnLobby"
+        ]
+    },
+    "Shelter.EnterShootingRange": {
+        "recognition": "OCR",
+        "roi": [
+            300,
+            600,
+            400,
+            200
+        ],
+        "expected": [
+            "战术靶场",
+            "靶场"
+        ],
+        "action": "Click",
+        "post_delay": 1200,
+        "max_hit": 5,
+        "next": [
+            "Shelter.CheckDailyShootingAttempts",
+            "Shelter.ShootingRangeExhaustedSkip",
+            "Shelter.ExecuteTargetPractice",
+            "Shelter.StartShootingRoutine"
+        ]
+    },
+    "Shelter.CheckDailyShootingAttempts": {
+        "recognition": "OCR",
+        "roi": [
+            800,
+            700,
+            960,
+            500
+        ],
+        "expected": [
+            "今日挑战",
+            "剩余次数",
+            "开始挑战",
+            "打靶",
+            "1/3",
+            "2/3",
+            "3/3"
+        ],
+        "action": "DoNothing",
+        "max_hit": 5,
+        "next": [
+            "Shelter.ExecuteTargetPractice",
+            "Shelter.StartShootingRoutine",
+            "Shelter.ShootingRangeExhaustedSkip",
+            "Shelter.ShootingRangeReturn"
+        ]
+    },
+    "Shelter.ShootingRangeExhaustedSkip": {
+        "recognition": "OCR",
+        "roi": [
+            800,
+            700,
+            960,
+            500
+        ],
+        "expected": [
+            "今日已完成",
+            "次数耗尽",
+            "0/3",
+            "明日再来",
+            "剩余次数: 0"
+        ],
+        "action": "DoNothing",
+        "max_hit": 3,
+        "next": [
+            "Shelter.ShootingRangeReturn",
+            "Shelter.EnterTrainingCenter",
+            "Shelter.CheckGenerator",
+            "Shelter.ReturnToLobby"
+        ]
+    },
+    "Shelter.ExecuteTargetPractice": {
+        "recognition": "OCR",
+        "roi": [
+            1800,
+            1300,
+            250,
+            80
+        ],
+        "expected": [
+            "开始挑战",
+            "开始",
+            "快速打靶",
+            "一键完成",
+            "开始打靶"
+        ],
+        "action": "Click",
+        "post_delay": 1500,
+        "max_hit": 5,
+        "next": [
+            "Shelter.FinishShootingRoutine",
+            "Shelter.ClaimShootingReward",
+            "Shelter.ShootingRangeReturn"
+        ]
+    },
+    "Shelter.StartShootingRoutine": {
+        "recognition": "OCR",
+        "roi": [
+            1800,
+            1300,
+            250,
+            80
+        ],
+        "expected": [
+            "开始挑战",
+            "开始",
+            "快速打靶",
+            "一键完成",
+            "开始打靶"
+        ],
+        "action": "Click",
+        "post_delay": 1500,
+        "max_hit": 5,
+        "next": [
+            "Shelter.FinishShootingRoutine",
+            "Shelter.ClaimShootingReward",
+            "Shelter.ShootingRangeReturn"
+        ]
+    },
+    "Shelter.FinishShootingRoutine": {
+        "recognition": "OCR",
+        "roi": [
+            600,
+            600,
+            1360,
+            600
+        ],
+        "expected": [
+            "训练结算",
+            "完成",
+            "退出靶场",
+            "点击任意位置关闭"
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "max_hit": 5,
+        "next": [
+            "Shelter.ClaimShootingReward",
+            "Shelter.ShootingRangeReturn"
+        ]
+    },
+    "Shelter.ClaimShootingReward": {
+        "recognition": "OCR",
+        "roi": [
+            1100,
+            1200,
+            360,
+            100
+        ],
+        "expected": [
+            "领取奖励",
+            "领取",
+            "确定"
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "max_hit": 5,
+        "next": [
+            "CommonClosePopup",
+            "Shelter.ShootingRangeReturn"
+        ]
+    },
+    "Shelter.ShootingRangeReturn": {
+        "recognition": "OCR",
+        "roi": [
+            120,
+            1520,
+            120,
+            70
+        ],
+        "expected": [
+            "返回",
+            "离开靶场",
+            "Esc",
+            "ESC"
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "max_hit": 3,
+        "next": [
+            "Shelter.EnterTrainingCenter",
+            "Shelter.CheckGenerator",
+            "Shelter.ReturnToLobby",
+            "Shelter.ReturnLobby",
+            "Shelter.SubpageReturn"
+        ]
+    },
+    "Shelter.EnterTrainingCenter": {
+        "recognition": "OCR",
+        "roi": [
+            800,
+            600,
+            400,
+            200
+        ],
+        "expected": [
+            "训练中心",
+            "干员训练"
+        ],
+        "action": "Click",
+        "post_delay": 1200,
+        "max_hit": 5,
+        "next": [
+            "Shelter.InspectOperatorStatus",
+            "Shelter.CheckTrainingStatus",
+            "Shelter.ClaimOperatorXP",
+            "Shelter.ClaimOperatorExp"
+        ]
+    },
+    "Shelter.InspectOperatorStatus": {
+        "recognition": "OCR",
+        "roi": [
+            400,
+            300,
+            600,
+            200
+        ],
+        "expected": [
+            "干员训练",
+            "训练中",
+            "加速",
+            "经验",
+            "可领取"
+        ],
+        "action": "DoNothing",
+        "max_hit": 5,
+        "next": [
+            "Shelter.ClaimOperatorXP",
+            "Shelter.ClaimOperatorExp",
+            "Shelter.DismissTrainingPopup",
+            "Shelter.RestartTraining",
+            "Shelter.TrainingCenterReturn"
+        ]
+    },
+    "Shelter.CheckTrainingStatus": {
+        "recognition": "OCR",
+        "roi": [
+            400,
+            300,
+            600,
+            200
+        ],
+        "expected": [
+            "干员训练",
+            "训练中",
+            "加速",
+            "经验",
+            "可领取"
+        ],
+        "action": "DoNothing",
+        "max_hit": 5,
+        "next": [
+            "Shelter.ClaimOperatorXP",
+            "Shelter.ClaimOperatorExp",
+            "Shelter.DismissTrainingPopup",
+            "Shelter.RestartTraining",
+            "Shelter.TrainingCenterReturn"
+        ]
+    },
+    "Shelter.ClaimOperatorXP": {
+        "recognition": "OCR",
+        "roi": [
+            1200,
+            800,
+            300,
+            100
+        ],
+        "expected": [
+            "领取",
+            "经验领取",
+            "加速领取",
+            "加速完成",
+            "完成"
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "max_hit": 5,
+        "next": [
+            "Shelter.DismissTrainingPopup",
+            "Shelter.RestartTraining",
+            "Shelter.TrainingCenterReturn"
+        ]
+    },
+    "Shelter.ClaimOperatorExp": {
+        "recognition": "OCR",
+        "roi": [
+            1200,
+            800,
+            300,
+            100
+        ],
+        "expected": [
+            "领取",
+            "经验领取",
+            "加速领取",
+            "加速完成",
+            "完成"
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "max_hit": 5,
+        "next": [
+            "Shelter.DismissTrainingPopup",
+            "Shelter.RestartTraining",
+            "Shelter.TrainingCenterReturn"
+        ]
+    },
+    "Shelter.DismissTrainingPopup": {
+        "recognition": "OCR",
+        "roi": [
+            800,
+            800,
+            800,
+            300
+        ],
+        "expected": [
+            "确定",
+            "完成",
+            "关闭"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "max_hit": 5,
+        "next": [
+            "Shelter.RestartTraining",
+            "Shelter.TrainingCenterReturn"
+        ]
+    },
+    "Shelter.RestartTraining": {
+        "recognition": "OCR",
+        "roi": [
+            1800,
+            1200,
+            300,
+            80
+        ],
+        "expected": [
+            "重新训练",
+            "开始训练",
+            "派遣"
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "max_hit": 3,
+        "next": [
+            "Shelter.TrainingCenterReturn"
+        ]
+    },
+    "Shelter.TrainingCenterReturn": {
+        "recognition": "OCR",
+        "roi": [
+            120,
+            1520,
+            120,
+            70
+        ],
+        "expected": [
+            "返回",
+            "离开训练中心",
+            "Esc",
+            "ESC"
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "max_hit": 3,
+        "next": [
+            "Shelter.CheckGenerator",
+            "Shelter.ReturnToLobby",
+            "Shelter.ReturnLobby",
+            "Shelter.SubpageReturn"
         ]
     },
     "Shelter.CheckGenerator": {
@@ -61,8 +467,10 @@
         ],
         "action": "Click",
         "post_delay": 1000,
+        "max_hit": 5,
         "next": [
             "Shelter.Refuel",
+            "Shelter.ReturnToLobby",
             "Shelter.ReturnLobby"
         ]
     },
@@ -81,9 +489,31 @@
         ],
         "action": "Click",
         "post_delay": 1000,
+        "max_hit": 5,
         "next": [
             "CommonClosePopup",
+            "Shelter.ReturnToLobby",
             "Shelter.ReturnLobby"
+        ]
+    },
+    "Shelter.ReturnToLobby": {
+        "recognition": "OCR",
+        "roi": [
+            180,
+            40,
+            160,
+            60
+        ],
+        "expected": [
+            "开始游戏",
+            "返回",
+            "离开特勤处"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "Startup.CheckLobby",
+            "Shelter.SubpageReturn"
         ]
     },
     "Shelter.ReturnLobby": {
@@ -100,6 +530,37 @@
         ],
         "action": "Click",
         "post_delay": 800,
+        "next": [
+            "Startup.CheckLobby",
+            "Shelter.SubpageReturn"
+        ]
+    },
+    "Shelter.SubpageReturn": {
+        "recognition": "OCR",
+        "roi": [
+            120,
+            1520,
+            120,
+            70
+        ],
+        "expected": [
+            "返回",
+            "Esc",
+            "ESC"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "max_hit": 3,
+        "next": [
+            "Startup.CheckLobby",
+            "Shelter.EscReturn"
+        ]
+    },
+    "Shelter.EscReturn": {
+        "action": "ClickKey",
+        "key": 27,
+        "post_delay": 800,
+        "max_hit": 3,
         "next": [
             "Startup.CheckLobby"
         ]
