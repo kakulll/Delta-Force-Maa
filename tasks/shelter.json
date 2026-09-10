@@ -95,9 +95,6 @@
                     "label": "开启发电机补油 (Enabled)",
                     "description": "自动进入动力室检查发电机燃油状态并快速补充燃油",
                     "pipeline_override": {
-                        "Shelter.CheckGenerator": {
-                            "enabled": true
-                        },
                         "Shelter.Refuel": {
                             "enabled": true
                         }
@@ -108,9 +105,6 @@
                     "label": "关闭发电机补油 (Disabled)",
                     "description": "跳过发电机检查与燃油补充动作",
                     "pipeline_override": {
-                        "Shelter.CheckGenerator": {
-                            "enabled": false
-                        },
                         "Shelter.Refuel": {
                             "enabled": false
                         }
@@ -157,12 +151,6 @@
                     "label": "实战执行模式 (RealRun 自动完成全流程)",
                     "description": "自动点击执行收获、开始打靶挑战、领取干员经验与补充燃料",
                     "pipeline_override": {
-                        "Shelter.ClaimCraftedItems": {
-                            "enabled": true
-                        },
-                        "Shelter.Refuel": {
-                            "enabled": true
-                        },
                         "Shelter.ExecuteTargetPractice": {
                             "enabled": true
                         },

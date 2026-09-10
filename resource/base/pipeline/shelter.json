@@ -99,7 +99,8 @@
             "Shelter.CheckDailyShootingAttempts",
             "Shelter.ShootingRangeExhaustedSkip",
             "Shelter.ExecuteTargetPractice",
-            "Shelter.StartShootingRoutine"
+            "Shelter.StartShootingRoutine",
+            "Shelter.ShootingRangeReturn"
         ]
     },
     "Shelter.CheckDailyShootingAttempts": {
@@ -122,9 +123,9 @@
         "action": "DoNothing",
         "max_hit": 5,
         "next": [
+            "Shelter.ShootingRangeExhaustedSkip",
             "Shelter.ExecuteTargetPractice",
             "Shelter.StartShootingRoutine",
-            "Shelter.ShootingRangeExhaustedSkip",
             "Shelter.ShootingRangeReturn"
         ]
     },
@@ -287,7 +288,8 @@
             "Shelter.InspectOperatorStatus",
             "Shelter.CheckTrainingStatus",
             "Shelter.ClaimOperatorXP",
-            "Shelter.ClaimOperatorExp"
+            "Shelter.ClaimOperatorExp",
+            "Shelter.TrainingCenterReturn"
         ]
     },
     "Shelter.InspectOperatorStatus": {

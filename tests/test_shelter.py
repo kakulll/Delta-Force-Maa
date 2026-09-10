@@ -8,6 +8,7 @@ Following 4-tier test architecture:
 """
 
 import copy
+import itertools
 import json
 from pathlib import Path
 import sys
@@ -402,7 +403,7 @@ class TestTier3ShelterRuntimeOptions(unittest.TestCase):
         self.assertFalse(harvest_ov["Shelter.CheckGenerator"]["enabled"])
 
     def test_tier3_refuel_toggle_override(self):
-        """Verify RefuelOption toggles generator refueling."""
+        """Verify RefuelOption toggles generator refueling without clobbering CheckGenerator."""
         refuel_opt = self.options.get("ShelterRefuelOption")
         self.assertIsNotNone(refuel_opt)
         cases = {c["name"]: c for c in refuel_opt.get("cases", [])}
@@ -411,9 +412,11 @@ class TestTier3ShelterRuntimeOptions(unittest.TestCase):
         self.assertIn("Disabled", cases)
         self.assertTrue(cases["Enabled"]["pipeline_override"]["Shelter.Refuel"]["enabled"])
         self.assertFalse(cases["Disabled"]["pipeline_override"]["Shelter.Refuel"]["enabled"])
+        self.assertNotIn("Shelter.CheckGenerator", cases["Enabled"]["pipeline_override"])
+        self.assertNotIn("Shelter.CheckGenerator", cases["Disabled"]["pipeline_override"])
 
     def test_tier3_dry_run_zero_action_oracle(self):
-        """Mathematical oracle: DryRun disables ClaimCraftedItems, Refuel, ExecuteTargetPractice, ClaimOperatorXP."""
+        """Mathematical oracle: DryRun disables transactional nodes; RealRun enables inner execution without clobbering Routine/Refuel."""
         dryrun_opt = self.options.get("ShelterDryRunOption")
         self.assertIsNotNone(dryrun_opt)
         cases = {c["name"]: c for c in dryrun_opt.get("cases", [])}
@@ -425,14 +428,20 @@ class TestTier3ShelterRuntimeOptions(unittest.TestCase):
         self.assertFalse(dry_ov["Shelter.ClaimCraftedItems"]["enabled"])
         self.assertFalse(dry_ov["Shelter.Refuel"]["enabled"])
         self.assertFalse(dry_ov["Shelter.ExecuteTargetPractice"]["enabled"])
+        self.assertFalse(dry_ov["Shelter.StartShootingRoutine"]["enabled"])
         self.assertFalse(dry_ov["Shelter.ClaimOperatorXP"]["enabled"])
+        self.assertFalse(dry_ov["Shelter.ClaimOperatorExp"]["enabled"])
+        self.assertFalse(dry_ov["Shelter.ClaimShootingReward"]["enabled"])
 
-        # RealRun enables them
+        # RealRun enables inner execution nodes without clobbering Routine/Refuel selections
         real_ov = cases["RealRun"]["pipeline_override"]
-        self.assertTrue(real_ov["Shelter.ClaimCraftedItems"]["enabled"])
-        self.assertTrue(real_ov["Shelter.Refuel"]["enabled"])
+        self.assertNotIn("Shelter.ClaimCraftedItems", real_ov)
+        self.assertNotIn("Shelter.Refuel", real_ov)
         self.assertTrue(real_ov["Shelter.ExecuteTargetPractice"]["enabled"])
+        self.assertTrue(real_ov["Shelter.StartShootingRoutine"]["enabled"])
         self.assertTrue(real_ov["Shelter.ClaimOperatorXP"]["enabled"])
+        self.assertTrue(real_ov["Shelter.ClaimOperatorExp"]["enabled"])
+        self.assertTrue(real_ov["Shelter.ClaimShootingReward"]["enabled"])
 
     def test_tier3_override_targets_exist_in_pipeline(self):
         """Verify EVERY node modified in any option's pipeline_override exists in the base pipeline."""
@@ -660,6 +669,113 @@ class TestTier4ShelterSimulationAndOracles(unittest.TestCase):
         self.assertTrue(terminated, f"Refuel disabled routine must terminate cleanly. Visited: {visited}")
         self.assertNotIn("Shelter.Refuel", visited)
         self.assertIn("Startup.CheckLobby", visited)
+
+    def test_tier4_entry_return_fallbacks_and_exhausted_priority(self):
+        """Verify entry return fallback nodes in next arrays and exhausted skip priority over practice."""
+        # 1. Fallback return presence
+        shooting_entry_next = self.pipeline["Shelter.EnterShootingRange"].get("next", [])
+        self.assertIn("Shelter.ShootingRangeReturn", shooting_entry_next,
+                      "Shelter.EnterShootingRange must have Shelter.ShootingRangeReturn as fallback")
+
+        training_entry_next = self.pipeline["Shelter.EnterTrainingCenter"].get("next", [])
+        self.assertIn("Shelter.TrainingCenterReturn", training_entry_next,
+                      "Shelter.EnterTrainingCenter must have Shelter.TrainingCenterReturn as fallback")
+
+        # 2. Priority check in CheckDailyShootingAttempts
+        check_attempts_next = self.pipeline["Shelter.CheckDailyShootingAttempts"].get("next", [])
+        self.assertIn("Shelter.ShootingRangeExhaustedSkip", check_attempts_next)
+        self.assertIn("Shelter.ExecuteTargetPractice", check_attempts_next)
+        exhausted_idx = check_attempts_next.index("Shelter.ShootingRangeExhaustedSkip")
+        practice_idx = check_attempts_next.index("Shelter.ExecuteTargetPractice")
+        self.assertLess(exhausted_idx, practice_idx,
+                        "Shelter.ShootingRangeExhaustedSkip must precede Shelter.ExecuteTargetPractice")
+
+        # 3. Traversal fallback simulation: unhandled shooting range screen falls back to ShootingRangeReturn
+        fallback_tokens = ["特勤处", "战术靶场", "返回", "开始游戏"]
+        visited, terminated = simulate_pipeline_run(self.pipeline, "Shelter.Start", fallback_tokens)
+        self.assertTrue(terminated)
+        self.assertIn("Shelter.EnterShootingRange", visited)
+        self.assertIn("Shelter.ShootingRangeReturn", visited)
+        self.assertIn("Startup.CheckLobby", visited)
+
+        # 4. Traversal fallback simulation: unhandled training center screen falls back to TrainingCenterReturn
+        training_fallback_tokens = ["特勤处", "训练中心", "返回", "开始游戏"]
+        training_patch = self.tasks["option"]["ShelterRoutineOption"]["cases"][2]["pipeline_override"]
+        nodes_training = apply_overrides(self.pipeline, training_patch)
+        visited, terminated = simulate_pipeline_run(nodes_training, "Shelter.Start", training_fallback_tokens)
+        self.assertTrue(terminated)
+        self.assertIn("Shelter.EnterTrainingCenter", visited)
+        self.assertIn("Shelter.TrainingCenterReturn", visited)
+        self.assertIn("Startup.CheckLobby", visited)
+
+    def test_tier4_all_16_option_combinations_semantic_isolation(self):
+        """Test all 16 combinations (Routine x Refuel x DryRun) for strict semantic isolation and safe termination."""
+        options = self.tasks["option"]
+        task_opts = self.tasks["task"][0]["option"]
+        cases = {opt: {c["name"]: c.get("pipeline_override", {}) for c in options[opt]["cases"]} for opt in task_opts}
+        combos = list(itertools.product(*[cases[opt].keys() for opt in task_opts]))
+
+        mock_tokens = [
+            "特勤处",
+            "全部收获",
+            "战术靶场",
+            "今日挑战",
+            "开始挑战",
+            "训练结算",
+            "领取奖励",
+            "训练中心",
+            "干员训练",
+            "领取",
+            "确定",
+            "重新训练",
+            "发电机",
+            "补充燃料",
+            "返回",
+            "开始游戏",
+        ]
+
+        self.assertEqual(len(combos), 16, "Must test exactly 16 combinations")
+
+        for combo in combos:
+            routine_mode, refuel_mode, dryrun_mode = combo
+            combo_label = f"[{routine_mode} + {refuel_mode} + {dryrun_mode}]"
+
+            # Apply overrides sequentially as declared in task["option"]
+            nodes = copy.deepcopy(self.pipeline)
+            for opt_name, case_name in zip(task_opts, combo):
+                nodes = apply_overrides(nodes, cases[opt_name][case_name])
+
+            visited, terminated = simulate_pipeline_run(nodes, "Shelter.Start", mock_tokens)
+            self.assertTrue(terminated, f"{combo_label}: must terminate cleanly. Visited: {visited}")
+            self.assertIn("Startup.CheckLobby", visited, f"{combo_label}: must reach Startup.CheckLobby")
+
+            # Semantic isolation assertions
+            if routine_mode == "ShootingOnly":
+                self.assertNotIn("Shelter.ClaimCraftedItems", visited, f"{combo_label}: ClaimCraftedItems must not execute")
+                self.assertNotIn("Shelter.Refuel", visited, f"{combo_label}: Refuel must not execute")
+                self.assertNotIn("Shelter.EnterTrainingCenter", visited, f"{combo_label}: TrainingCenter must not be entered")
+
+            if routine_mode == "TrainingOnly":
+                self.assertNotIn("Shelter.ClaimCraftedItems", visited, f"{combo_label}: ClaimCraftedItems must not execute")
+                self.assertNotIn("Shelter.Refuel", visited, f"{combo_label}: Refuel must not execute")
+                self.assertNotIn("Shelter.EnterShootingRange", visited, f"{combo_label}: ShootingRange must not be entered")
+
+            if routine_mode == "HarvestOnly":
+                self.assertNotIn("Shelter.Refuel", visited, f"{combo_label}: Refuel must not execute")
+                self.assertNotIn("Shelter.EnterShootingRange", visited, f"{combo_label}: ShootingRange must not be entered")
+                self.assertNotIn("Shelter.EnterTrainingCenter", visited, f"{combo_label}: TrainingCenter must not be entered")
+
+            if refuel_mode == "Disabled":
+                self.assertNotIn("Shelter.Refuel", visited, f"{combo_label}: Refuel must not execute when Disabled")
+
+            if dryrun_mode == "DryRun":
+                self.assertNotIn("Shelter.ClaimCraftedItems", visited, f"{combo_label}: DryRun must not ClaimCraftedItems")
+                self.assertNotIn("Shelter.Refuel", visited, f"{combo_label}: DryRun must not Refuel")
+                self.assertNotIn("Shelter.ExecuteTargetPractice", visited, f"{combo_label}: DryRun must not ExecuteTargetPractice")
+                self.assertNotIn("Shelter.StartShootingRoutine", visited, f"{combo_label}: DryRun must not StartShootingRoutine")
+                self.assertNotIn("Shelter.ClaimOperatorXP", visited, f"{combo_label}: DryRun must not ClaimOperatorXP")
+                self.assertNotIn("Shelter.ClaimOperatorExp", visited, f"{combo_label}: DryRun must not ClaimOperatorExp")
+                self.assertNotIn("Shelter.ClaimShootingReward", visited, f"{combo_label}: DryRun must not ClaimShootingReward")
 
 
 if __name__ == "__main__":
