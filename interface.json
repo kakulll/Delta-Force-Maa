@@ -26,7 +26,8 @@
         "./tasks/shelter.json",
         "./tasks/trading.json",
         "./tasks/ammo_flip.json",
-        "./tasks/warehouse.json"
+        "./tasks/warehouse.json",
+        "./tasks/department.json"
     ],
     "agent": [
         {

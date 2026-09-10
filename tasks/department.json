@@ -1,0 +1,107 @@
+{
+    "option": {
+        "DepartmentStrategyOption": {
+            "type": "select",
+            "label": "兑换策略",
+            "description": "选择仅领取每日免费补给或包含高性价比限购特惠物资",
+            "default_case": "FreeOnly",
+            "cases": [
+                {
+                    "name": "FreeOnly",
+                    "label": "仅免费每日补给（零消耗零风险）",
+                    "description": "仅自动检测并领取各部门每日免费补给礼包，不购买任何消耗哈夫币或代币的物资",
+                    "pipeline_override": {
+                        "Department.ScanQuotaItem": {
+                            "enabled": false
+                        },
+                        "Department.ClaimDiscountedSupplies": {
+                            "enabled": false
+                        }
+                    }
+                },
+                {
+                    "name": "FreeAndDiscounted",
+                    "label": "免费补给 + 限购特惠物资（自动扫荡高性价比物品）",
+                    "description": "优先领取每日免费补给礼包，并自动扫描并兑换各部门限购特惠高性价比物资",
+                    "pipeline_override": {
+                        "Department.ScanQuotaItem": {
+                            "enabled": true
+                        },
+                        "Department.ClaimDiscountedSupplies": {
+                            "enabled": true
+                        }
+                    }
+                }
+            ]
+        },
+        "DepartmentDryRunOption": {
+            "type": "select",
+            "label": "执行模式",
+            "description": "安全预览模式或实际执行兑换扣除代币",
+            "default_case": "DryRun",
+            "cases": [
+                {
+                    "name": "DryRun",
+                    "label": "安全预览模式（仅识别导航与开弹窗，不确认兑换）",
+                    "description": "安全测试与预览模式，仅浏览与识别界面，不执行真实兑换扣费，零资产消耗",
+                    "pipeline_override": {
+                        "Department.ConfirmExchangeDialog": {
+                            "enabled": false
+                        },
+                        "Department.ClickExchangeButton": {
+                            "enabled": false
+                        }
+                    }
+                },
+                {
+                    "name": "RealRun",
+                    "label": "实际执行模式（自动确认兑换并扣除所需代币）",
+                    "description": "正常执行点击兑换按钮与确认二次弹窗，真实结算并获取物资",
+                    "pipeline_override": {
+                        "Department.ConfirmExchangeDialog": {
+                            "enabled": true
+                        },
+                        "Department.ClickExchangeButton": {
+                            "enabled": true
+                        }
+                    }
+                },
+                {
+                    "name": "RealAction",
+                    "label": "实际兑换（真实执行领取与结算）",
+                    "description": "正常执行点击兑换按钮与确认二次弹窗，真实结算并获取物资",
+                    "pipeline_override": {
+                        "Department.ConfirmExchangeDialog": {
+                            "enabled": true
+                        },
+                        "Department.ClickExchangeButton": {
+                            "enabled": true
+                        }
+                    }
+                }
+            ]
+        }
+    },
+    "task": [
+        {
+            "name": "Department",
+            "label": "部门每日物资兑换与福利自动领取",
+            "description": "自动导航至部门军需处，按设定策略遍历各部门子页签，自动识别并领取每日免费补给，自动扫描并兑换限购特惠物资，支持DryRun安全预览，完成后安全返回整备大厅",
+            "entry": "Department.Start",
+            "option": [
+                "DepartmentStrategyOption",
+                "DepartmentDryRunOption"
+            ]
+        },
+        {
+            "name": "DepartmentClaim",
+            "label": "部门每日物资兑换与福利自动领取",
+            "description": "自动导航至部门军需处，按设定策略遍历各部门子页签，自动识别并领取每日免费补给，自动扫描并兑换限购特惠物资，支持DryRun安全预览，完成后安全返回整备大厅",
+            "entry": "Department.Start",
+            "option": [
+                "DepartmentStrategyOption",
+                "DepartmentDryRunOption"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,638 @@
+{
+    "Department.Start": {
+        "action": "DoNothing",
+        "next": [
+            "Department.EnterDepartment",
+            "Department.CheckMainPage",
+            "Startup.CheckLobby"
+        ]
+    },
+    "Department.EnterDepartment": {
+        "recognition": "OCR",
+        "roi": [
+            700,
+            30,
+            150,
+            70
+        ],
+        "expected": [
+            "部门"
+        ],
+        "action": "Click",
+        "post_delay": 1500,
+        "next": [
+            "Department.CheckMainPage"
+        ],
+        "on_error": [
+            "Department.EscReturn",
+            "Department.ReturnToLobby"
+        ]
+    },
+    "Department.CheckMainPage": {
+        "recognition": "OCR",
+        "roi": [
+            150,
+            100,
+            600,
+            80
+        ],
+        "expected": [
+            "军需处",
+            "部门任务",
+            "赛季任务"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "Department.EnterQuartermaster"
+        ]
+    },
+    "Department.EnterQuartermaster": {
+        "recognition": "OCR",
+        "roi": [
+            520,
+            110,
+            160,
+            60
+        ],
+        "expected": [
+            "军需处"
+        ],
+        "action": "Click",
+        "post_delay": 1200,
+        "timeout": 5000,
+        "next": [
+            "Department.TabCombat"
+        ],
+        "on_error": [
+            "Department.TabCombat"
+        ]
+    },
+    "Department.OpenQuartermaster": {
+        "recognition": "OCR",
+        "roi": [
+            520,
+            110,
+            160,
+            60
+        ],
+        "expected": [
+            "军需处"
+        ],
+        "action": "Click",
+        "post_delay": 1200,
+        "timeout": 5000,
+        "next": [
+            "Department.TabCombat"
+        ]
+    },
+    "Department.CheckQuartermasterOpen": {
+        "recognition": "OCR",
+        "roi": [
+            150,
+            60,
+            900,
+            70
+        ],
+        "expected": [
+            "战斗部门",
+            "医疗部门",
+            "后勤部门",
+            "战术部门",
+            "研发部门"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "Department.TabCombat",
+            "Department.TabMedical",
+            "Department.TabLogistics",
+            "Department.TabTactical",
+            "Department.TabRD"
+        ]
+    },
+    "Department.TabCombat": {
+        "recognition": "OCR",
+        "roi": [
+            180,
+            70,
+            140,
+            60
+        ],
+        "expected": [
+            "战斗部门",
+            "战斗"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "Department.ScanFreeItem",
+            "Department.ScanQuotaItem",
+            "Department.TabMedical"
+        ],
+        "on_error": [
+            "Department.TabMedical"
+        ]
+    },
+    "Department.SelectCombat": {
+        "recognition": "OCR",
+        "roi": [
+            180,
+            70,
+            140,
+            60
+        ],
+        "expected": [
+            "战斗部门",
+            "战斗"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "Department.ScanFreeItem",
+            "Department.ScanQuotaItem",
+            "Department.TabMedical"
+        ]
+    },
+    "Department.TabMedical": {
+        "recognition": "OCR",
+        "roi": [
+            350,
+            70,
+            140,
+            60
+        ],
+        "expected": [
+            "医疗部门",
+            "医疗"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "Department.ScanFreeItem",
+            "Department.ScanQuotaItem",
+            "Department.TabLogistics"
+        ],
+        "on_error": [
+            "Department.TabLogistics"
+        ]
+    },
+    "Department.SelectMedical": {
+        "recognition": "OCR",
+        "roi": [
+            350,
+            70,
+            140,
+            60
+        ],
+        "expected": [
+            "医疗部门",
+            "医疗"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "Department.ScanFreeItem",
+            "Department.ScanQuotaItem",
+            "Department.TabLogistics"
+        ]
+    },
+    "Department.TabLogistics": {
+        "recognition": "OCR",
+        "roi": [
+            520,
+            70,
+            140,
+            60
+        ],
+        "expected": [
+            "后勤部门",
+            "后勤"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "Department.ScanFreeItem",
+            "Department.ScanQuotaItem",
+            "Department.TabTactical"
+        ],
+        "on_error": [
+            "Department.TabTactical"
+        ]
+    },
+    "Department.SelectLogistics": {
+        "recognition": "OCR",
+        "roi": [
+            520,
+            70,
+            140,
+            60
+        ],
+        "expected": [
+            "后勤部门",
+            "后勤"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "Department.ScanFreeItem",
+            "Department.ScanQuotaItem",
+            "Department.TabTactical"
+        ]
+    },
+    "Department.TabTactical": {
+        "recognition": "OCR",
+        "roi": [
+            700,
+            70,
+            140,
+            60
+        ],
+        "expected": [
+            "战术部门",
+            "战术"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "Department.ScanFreeItem",
+            "Department.ScanQuotaItem",
+            "Department.TabRD"
+        ],
+        "on_error": [
+            "Department.TabRD"
+        ]
+    },
+    "Department.SelectTactical": {
+        "recognition": "OCR",
+        "roi": [
+            700,
+            70,
+            140,
+            60
+        ],
+        "expected": [
+            "战术部门",
+            "战术"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "Department.ScanFreeItem",
+            "Department.ScanQuotaItem",
+            "Department.TabRD"
+        ]
+    },
+    "Department.TabRD": {
+        "recognition": "OCR",
+        "roi": [
+            870,
+            70,
+            140,
+            60
+        ],
+        "expected": [
+            "研发部门",
+            "研发"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "Department.ScanFreeItem",
+            "Department.ScanQuotaItem",
+            "Department.ReturnToLobby"
+        ],
+        "on_error": [
+            "Department.ReturnToLobby"
+        ]
+    },
+    "Department.SelectRD": {
+        "recognition": "OCR",
+        "roi": [
+            870,
+            70,
+            140,
+            60
+        ],
+        "expected": [
+            "研发部门",
+            "研发"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "Department.ScanFreeItem",
+            "Department.ScanQuotaItem",
+            "Department.ReturnToLobby"
+        ]
+    },
+    "Department.ScanFreeItem": {
+        "recognition": "OCR",
+        "roi": [
+            100,
+            240,
+            1800,
+            1250
+        ],
+        "expected": [
+            "免费",
+            "每日补给",
+            "0",
+            "免费领取"
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "max_hit": 2,
+        "next": [
+            "Department.ConfirmExchangeDialog",
+            "Department.DismissSettlement",
+            "Department.CancelModal"
+        ]
+    },
+    "Department.ClaimFreePack": {
+        "recognition": "OCR",
+        "roi": [
+            100,
+            240,
+            1800,
+            1250
+        ],
+        "expected": [
+            "免费",
+            "每日补给",
+            "0",
+            "免费领取"
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "max_hit": 2,
+        "next": [
+            "Department.ConfirmExchangeDialog",
+            "Department.DismissSettlement",
+            "Department.CancelModal"
+        ]
+    },
+    "Department.IdentifyFreePack": {
+        "recognition": "OCR",
+        "roi": [
+            100,
+            240,
+            1800,
+            1250
+        ],
+        "expected": [
+            "免费",
+            "每日补给",
+            "0"
+        ],
+        "action": "DoNothing"
+    },
+    "Department.ScanQuotaItem": {
+        "recognition": "OCR",
+        "roi": [
+            100,
+            240,
+            1800,
+            1250
+        ],
+        "expected": [
+            "限购",
+            "限购1",
+            "限购2"
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "max_hit": 2,
+        "next": [
+            "Department.ConfirmExchangeDialog",
+            "Department.CancelModal"
+        ]
+    },
+    "Department.IdentifyDiscountedItem": {
+        "recognition": "OCR",
+        "roi": [
+            100,
+            240,
+            1800,
+            1250
+        ],
+        "expected": [
+            "限购",
+            "限购1",
+            "限购2"
+        ],
+        "action": "DoNothing"
+    },
+    "Department.ClaimDiscountedSupplies": {
+        "recognition": "OCR",
+        "roi": [
+            1400,
+            1000,
+            800,
+            550
+        ],
+        "expected": [
+            "兑换",
+            "购买"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "Department.ConfirmExchangeDialog",
+            "Department.DismissSettlement",
+            "Department.CancelModal"
+        ]
+    },
+    "Department.ClickExchangeButton": {
+        "recognition": "OCR",
+        "roi": [
+            1400,
+            1000,
+            800,
+            550
+        ],
+        "expected": [
+            "兑换",
+            "购买",
+            "领取",
+            "免费领取"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "Department.ConfirmExchangeDialog",
+            "Department.DismissSettlement",
+            "Department.CancelModal"
+        ]
+    },
+    "Department.ConfirmExchangeDialog": {
+        "recognition": "OCR",
+        "roi": [
+            900,
+            800,
+            760,
+            400
+        ],
+        "expected": [
+            "确认",
+            "兑换",
+            "购买"
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "next": [
+            "Department.DismissSettlement"
+        ]
+    },
+    "Department.CancelModal": {
+        "recognition": "DirectHit",
+        "action": "ClickKey",
+        "key": 27,
+        "post_delay": 500,
+        "next": [
+            "Department.ReturnToLobby"
+        ]
+    },
+    "Department.CancelExchangeModal": {
+        "recognition": "DirectHit",
+        "action": "ClickKey",
+        "key": 27,
+        "post_delay": 500,
+        "next": [
+            "Department.ReturnToLobby"
+        ]
+    },
+    "Department.DismissSettlement": {
+        "recognition": "OCR",
+        "roi": [
+            1000,
+            1400,
+            560,
+            150
+        ],
+        "expected": [
+            "获得道具",
+            "获得物品",
+            "点击空白处关闭",
+            "确定"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "max_hit": 5,
+        "next": [
+            "Department.ReturnToLobby"
+        ]
+    },
+    "Department.DismissSettlementModal": {
+        "recognition": "OCR",
+        "roi": [
+            1000,
+            1400,
+            560,
+            150
+        ],
+        "expected": [
+            "获得道具",
+            "获得物品",
+            "点击空白处关闭",
+            "确定"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "max_hit": 5,
+        "next": [
+            "Department.ReturnToLobby"
+        ]
+    },
+    "Department.DismissSettlementKey": {
+        "action": "ClickKey",
+        "key": 27,
+        "post_delay": 500
+    },
+    "Department.CheckLocked": {
+        "recognition": "OCR",
+        "roi": [
+            100,
+            240,
+            1800,
+            1250
+        ],
+        "expected": [
+            "解锁条件",
+            "等级解锁",
+            "暂未开放"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "Department.SkipLockedSector"
+        ]
+    },
+    "Department.SkipLockedSector": {
+        "action": "DoNothing",
+        "next": [
+            "Department.TabMedical",
+            "Department.TabLogistics",
+            "Department.TabTactical",
+            "Department.TabRD",
+            "Department.ReturnToLobby"
+        ]
+    },
+    "Department.ReturnToLobby": {
+        "recognition": "OCR",
+        "roi": [
+            180,
+            40,
+            160,
+            60
+        ],
+        "expected": [
+            "开始游戏"
+        ],
+        "action": "Click",
+        "post_delay": 1500,
+        "next": [
+            "Startup.CheckLobby",
+            "Department.EscReturn"
+        ],
+        "on_error": [
+            "Department.SubpageReturn",
+            "Department.EscReturn"
+        ]
+    },
+    "Department.SubpageReturn": {
+        "recognition": "OCR",
+        "roi": [
+            120,
+            1520,
+            120,
+            70
+        ],
+        "expected": [
+            "返回",
+            "Esc",
+            "ESC"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "Department.ReturnToLobby",
+            "Startup.CheckLobby",
+            "Department.EscReturn"
+        ]
+    },
+    "Department.EscReturn": {
+        "action": "ClickKey",
+        "key": 27,
+        "post_delay": 800,
+        "max_hit": 3,
+        "next": [
+            "Startup.CheckLobby"
+        ]
+    },
+    "Department.DryRunHook": {
+        "action": "DoNothing",
+        "enabled": true
+    },
+    "Department.StrategyHook": {
+        "action": "DoNothing",
+        "enabled": true
+    }
+}
