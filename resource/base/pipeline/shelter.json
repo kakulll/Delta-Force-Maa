@@ -10,10 +10,10 @@
     "Shelter.EnterDepartment": {
         "recognition": "OCR",
         "roi": [
-            680,
-            20,
-            120,
-            60
+            1050,
+            30,
+            140,
+            80
         ],
         "expected": [
             "特勤处"

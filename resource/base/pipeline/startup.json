@@ -11,10 +11,10 @@
     "Startup.CheckLobby": {
         "recognition": "OCR",
         "roi": [
-            100,
+            150,
             20,
-            800,
-            60
+            1200,
+            80
         ],
         "expected": [
             "开始游戏",

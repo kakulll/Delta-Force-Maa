@@ -11,10 +11,10 @@
     "Trading.EnterTrading": {
         "recognition": "OCR",
         "roi": [
-            570,
-            20,
-            110,
-            60
+            880,
+            30,
+            140,
+            80
         ],
         "expected": [
             "交易行"
