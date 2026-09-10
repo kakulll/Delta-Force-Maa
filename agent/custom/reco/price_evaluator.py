@@ -14,7 +14,10 @@ from utils.params import parse_params
 
 @AgentServer.custom_recognition("PriceEvaluator")
 class PriceEvaluator(CustomRecognition):
-    """基于社区 GTImaster 算法的交易行价格识别与阈值判定组件。
+    """MaaFramework 自定义价格阈值评估识别器。
+
+    基于 MaaFramework Pipeline 协议设计，配合 OCR 节点实现数值提取、
+    异常底价防丢位过滤及最高预算上限判定。
 
     参数说明:
         custom_recognition_param:
