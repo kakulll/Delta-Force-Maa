@@ -53,6 +53,15 @@
                                 "急救包"
                             ]
                         },
+                        "Loadout.CheckStashAmmo": {
+                            "expected": [
+                                "5.56x45mm M995",
+                                "M995",
+                                "5.56穿甲弹",
+                                "AP弹",
+                                "5级弹药"
+                            ]
+                        },
                         "Loadout.SearchMissingItemInput": {
                             "input_text": "全防头盔"
                         }
@@ -105,6 +114,14 @@
                                 "便携医疗包"
                             ]
                         },
+                        "Loadout.CheckStashAmmo": {
+                            "expected": [
+                                "5.56x45mm M855A1",
+                                "M855A1",
+                                "7.62x39mm BP",
+                                "4级穿甲弹"
+                            ]
+                        },
                         "Loadout.SearchMissingItemInput": {
                             "input_text": "战术侦察头盔"
                         }
@@ -155,6 +172,14 @@
                                 "简易止痛药",
                                 "急救绷带",
                                 "基础止痛"
+                            ]
+                        },
+                        "Loadout.CheckStashAmmo": {
+                            "expected": [
+                                "5.56x45mm M855",
+                                "M855",
+                                "7.62x39mm PS",
+                                "3级弹药"
                             ]
                         },
                         "Loadout.SearchMissingItemInput": {
@@ -217,6 +242,15 @@
                                 "急救包"
                             ]
                         },
+                        "Loadout.CheckStashAmmo": {
+                            "expected": [
+                                "5.56x45mm M995",
+                                "M995",
+                                "5.56穿甲弹",
+                                "AP弹",
+                                "5级弹药"
+                            ]
+                        },
                         "Loadout.SearchMissingItemInput": {
                             "input_text": "全防头盔"
                         }
@@ -269,6 +303,14 @@
                                 "便携医疗包"
                             ]
                         },
+                        "Loadout.CheckStashAmmo": {
+                            "expected": [
+                                "5.56x45mm M855A1",
+                                "M855A1",
+                                "7.62x39mm BP",
+                                "4级穿甲弹"
+                            ]
+                        },
                         "Loadout.SearchMissingItemInput": {
                             "input_text": "战术侦察头盔"
                         }
@@ -319,6 +361,14 @@
                                 "简易止痛药",
                                 "急救绷带",
                                 "基础止痛"
+                            ]
+                        },
+                        "Loadout.CheckStashAmmo": {
+                            "expected": [
+                                "5.56x45mm M855",
+                                "M855",
+                                "7.62x39mm PS",
+                                "3级弹药"
                             ]
                         },
                         "Loadout.SearchMissingItemInput": {
@@ -479,6 +529,92 @@
                     }
                 }
             ]
+        },
+        "LoadoutBudgetOption": {
+            "type": "select",
+            "label": "战备预算档位上限",
+            "description": "设置战备总采购预算（10万/30万/100万哈夫币），由MCKP动态规划求解最优配装",
+            "default_case": "Budget300k",
+            "cases": [
+                {
+                    "name": "Budget100k",
+                    "label": "10万 哈夫币 (经济过渡 / 跑刀低保)",
+                    "description": "低成本经济配置，防具3~4级+主流步枪弹，严格约束在10万以内",
+                    "pipeline_override": {
+                        "Loadout.CheckStashHelmet": {
+                            "expected": [
+                                "基础轻便头盔",
+                                "3级头盔"
+                            ]
+                        },
+                        "Loadout.CheckStashArmor": {
+                            "expected": [
+                                "经济防弹衣",
+                                "3级防弹衣"
+                            ]
+                        },
+                        "Loadout.CheckStashAmmo": {
+                            "expected": [
+                                "5.56x45mm M855",
+                                "3级弹药"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Budget300k",
+                    "label": "30万 哈夫币 (标准排位 / 均衡中产)",
+                    "description": "均衡攻守配置，4~5级头甲+穿甲弹药，严格约束在30万以内",
+                    "pipeline_override": {
+                        "Loadout.CheckStashHelmet": {
+                            "expected": [
+                                "战术侦察头盔",
+                                "4级头盔"
+                            ]
+                        },
+                        "Loadout.CheckStashArmor": {
+                            "expected": [
+                                "高机动防弹衣",
+                                "4级防弹衣"
+                            ]
+                        },
+                        "Loadout.CheckStashAmmo": {
+                            "expected": [
+                                "5.56x45mm M855A1",
+                                "4级穿甲弹"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Budget1M",
+                    "label": "100万 哈夫币 (顶级要塞 / 豪华重装)",
+                    "description": "顶配攻坚配置，5~6级重甲头盔+顶级穿甲金弹，严格约束在100万以内",
+                    "pipeline_override": {
+                        "Loadout.CheckStashHelmet": {
+                            "expected": [
+                                "全防头盔",
+                                "5级头盔",
+                                "6级头盔"
+                            ]
+                        },
+                        "Loadout.CheckStashArmor": {
+                            "expected": [
+                                "重装防弹衣",
+                                "5级防弹衣",
+                                "6级防弹衣"
+                            ]
+                        },
+                        "Loadout.CheckStashAmmo": {
+                            "expected": [
+                                "5.56x45mm M995",
+                                "5级弹药",
+                                "金弹"
+                            ]
+                        }
+                    }
+                }
+            ]
         }
     },
     "task": [
@@ -490,7 +626,8 @@
             "option": [
                 "LoadoutPresetOption",
                 "LoadoutAllowTradingBuyOption",
-                "LoadoutDryRunOption"
+                "LoadoutDryRunOption",
+                "LoadoutBudgetOption"
             ]
         }
     ]

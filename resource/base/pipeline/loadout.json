@@ -106,6 +106,7 @@
             "Loadout.InspectChestRigSlot",
             "Loadout.InspectBackpackSlot",
             "Loadout.InspectMedsSlot",
+            "Loadout.InspectAmmoSlot",
             "Loadout.CheckWarehouseStock",
             "Loadout.VerifyAllSlotsEquipped"
         ]
@@ -222,6 +223,30 @@
         "post_delay": 500,
         "next": [
             "Loadout.CheckStashMeds",
+            "Loadout.InspectAmmoSlot"
+        ],
+        "on_error": [
+            "Loadout.InspectAmmoSlot"
+        ]
+    },
+    "Loadout.InspectAmmoSlot": {
+        "recognition": "OCR",
+        "roi": [
+            250,
+            1100,
+            200,
+            120
+        ],
+        "expected": [
+            "弹药",
+            "备用弹药",
+            "子弹",
+            "未装备"
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "Loadout.CheckStashAmmo",
             "Loadout.VerifyAllSlotsEquipped"
         ],
         "on_error": [
@@ -249,6 +274,7 @@
             "Loadout.CheckStashChestRig",
             "Loadout.CheckStashBackpack",
             "Loadout.CheckStashMeds",
+            "Loadout.CheckStashAmmo",
             "Loadout.CheckMissingParts"
         ],
         "on_error": [
@@ -360,6 +386,30 @@
             "医疗包",
             "急救包",
             "止痛药"
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "Loadout.RetrieveGear",
+            "Loadout.CheckMissingParts"
+        ],
+        "on_error": [
+            "Loadout.CheckMissingParts"
+        ]
+    },
+    "Loadout.CheckStashAmmo": {
+        "recognition": "OCR",
+        "roi": [
+            1500,
+            200,
+            900,
+            600
+        ],
+        "expected": [
+            "穿甲弹",
+            "步枪弹",
+            "主力弹药",
+            "子弹"
         ],
         "action": "Click",
         "post_delay": 500,
