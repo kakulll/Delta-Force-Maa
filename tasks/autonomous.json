@@ -1,0 +1,135 @@
+{
+    "option": {
+        "AutonomousStrategyOption": {
+            "type": "select",
+            "label": "全托管日常策略",
+            "description": "选择一键全托管的任务范围与执行顺序",
+            "default_case": "FullDaily",
+            "cases": [
+                {
+                    "name": "FullDaily",
+                    "label": "全量日常托管 (签到+部门+特勤处+清仓+倒货)",
+                    "description": "依次执行每日签到与战备手账、部门福利领取、特勤处收菜打靶、战后仓库清仓、自动倒子弹与在售收益领取全流程",
+                    "pipeline_override": {
+                        "Autonomous.Step2Daily": { "enabled": true },
+                        "Autonomous.Step3Department": { "enabled": true },
+                        "Autonomous.Step4Shelter": { "enabled": true },
+                        "Autonomous.Step5Warehouse": { "enabled": true },
+                        "Autonomous.Step6AmmoFlip": { "enabled": true }
+                    }
+                },
+                {
+                    "name": "DailyWelfareOnly",
+                    "label": "仅日常福利收菜 (签到+部门+特勤处)",
+                    "description": "仅执行每日签到与战备手账福利领取、部门军需兑换、特勤处制造收获与训练经验领取",
+                    "pipeline_override": {
+                        "Autonomous.Step2Daily": { "enabled": true },
+                        "Autonomous.Step3Department": { "enabled": true },
+                        "Autonomous.Step4Shelter": { "enabled": true },
+                        "Autonomous.Step5Warehouse": { "enabled": false },
+                        "Autonomous.Step6AmmoFlip": { "enabled": false }
+                    }
+                },
+                {
+                    "name": "ClearAndFlipOnly",
+                    "label": "仅清仓与倒货 (清仓+倒子弹)",
+                    "description": "仅执行战后仓库一键清仓变现和自动倒子弹收益领取",
+                    "pipeline_override": {
+                        "Autonomous.Step2Daily": { "enabled": false },
+                        "Autonomous.Step3Department": { "enabled": false },
+                        "Autonomous.Step4Shelter": { "enabled": false },
+                        "Autonomous.Step5Warehouse": { "enabled": true },
+                        "Autonomous.Step6AmmoFlip": { "enabled": true }
+                    }
+                }
+            ]
+        },
+        "AutonomousPostRunOption": {
+            "type": "select",
+            "label": "完成后动作",
+            "description": "全托管流程执行完毕后的处理方式",
+            "default_case": "StayLobby",
+            "cases": [
+                {
+                    "name": "StayLobby",
+                    "label": "保持大厅待机",
+                    "description": "任务完成后停留在整备大厅，不做额外操作"
+                },
+                {
+                    "name": "Shutdown",
+                    "label": "关闭游戏客户端",
+                    "description": "任务全部完成后通过Custom Action发送关闭客户端指令"
+                },
+                {
+                    "name": "Hibernate",
+                    "label": "系统进入休眠",
+                    "description": "任务完成后通过Custom Action触发系统休眠，适合夜间无人值守执行"
+                }
+            ]
+        },
+        "AutonomousWebhookOption": {
+            "type": "switch",
+            "label": "Webhook 战报推送",
+            "description": "任务完成后通过 Webhook 向手机推送收益战报与异常告警",
+            "default_case": "Disabled",
+            "cases": [
+                {
+                    "name": "Enabled",
+                    "label": "开启",
+                    "pipeline_override": {
+                        "Autonomous.ReportResults": {
+                            "custom_action_param": {
+                                "report_type": "daily_summary",
+                                "webhook_enabled": true
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Disabled",
+                    "label": "关闭",
+                    "pipeline_override": {
+                        "Autonomous.ReportResults": {
+                            "custom_action_param": {
+                                "report_type": "daily_summary",
+                                "webhook_enabled": false
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        "AutonomousDryRunOption": {
+            "type": "select",
+            "label": "全托管执行模式",
+            "description": "DryRun 模式下禁用所有消耗性动作（购买/出售/领取），仅做导航巡检后安全退出",
+            "default_case": "DryRun",
+            "cases": [
+                {
+                    "name": "DryRun",
+                    "label": "安全预览模式 (DryRun 零消耗/零交互)",
+                    "description": "执行全链路导航巡检，禁用所有实质交互，安全回退到大厅"
+                },
+                {
+                    "name": "RealRun",
+                    "label": "实战执行模式 (全量自动执行)",
+                    "description": "执行全链路完整托管，包含所有领取、购买、出售、上架动作"
+                }
+            ]
+        }
+    },
+    "task": [
+        {
+            "name": "AutonomousDaily",
+            "label": "一键全托管日常 (全流程自主执行)",
+            "description": "一键启动全量日常托管：自动签到领取福利 → 部门军需兑换 → 特勤处收菜打靶 → 战后清仓变现 → 自动倒子弹收益领取，支持 Webhook 战报推送与运行后自动休眠",
+            "entry": "Autonomous.Start",
+            "option": [
+                "AutonomousStrategyOption",
+                "AutonomousPostRunOption",
+                "AutonomousWebhookOption",
+                "AutonomousDryRunOption"
+            ]
+        }
+    ]
+}

@@ -30,7 +30,8 @@
         "./tasks/department.json",
         "./tasks/keycard.json",
         "./tasks/loadout.json",
-        "./tasks/gunsmith.json"
+        "./tasks/gunsmith.json",
+        "./tasks/autonomous.json"
     ],
     "agent": [
         {

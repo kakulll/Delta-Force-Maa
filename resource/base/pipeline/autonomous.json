@@ -1,0 +1,134 @@
+{
+    "Autonomous.Start": {
+        "action": "DoNothing",
+        "next": [
+            "Autonomous.Step1Startup",
+            "Startup.CheckLobby"
+        ]
+    },
+    "Autonomous.Step1Startup": {
+        "recognition": "OCR",
+        "roi": [
+            150,
+            20,
+            1200,
+            80
+        ],
+        "expected": [
+            "开始游戏",
+            "仓库",
+            "特战干员",
+            "部门",
+            "交易行",
+            "特勤处",
+            "改枪台"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "Autonomous.Step2Daily",
+            "Startup.CloseAnnouncement",
+            "CommonClosePopup",
+            "CommonDetectMaintenance",
+            "CommonDetectNetworkError"
+        ]
+    },
+    "Autonomous.Step2Daily": {
+        "action": "DoNothing",
+        "next": [
+            "Daily.OpenMail",
+            "Autonomous.Step3Department"
+        ]
+    },
+    "Autonomous.Step3Department": {
+        "action": "DoNothing",
+        "next": [
+            "Department.EnterDepartment",
+            "Autonomous.Step4Shelter"
+        ]
+    },
+    "Autonomous.Step4Shelter": {
+        "action": "DoNothing",
+        "next": [
+            "Shelter.EnterDepartment",
+            "Autonomous.Step5Warehouse"
+        ]
+    },
+    "Autonomous.Step5Warehouse": {
+        "action": "DoNothing",
+        "next": [
+            "Warehouse.Start",
+            "Autonomous.Step6AmmoFlip"
+        ]
+    },
+    "Autonomous.Step6AmmoFlip": {
+        "action": "DoNothing",
+        "next": [
+            "AmmoFlip.Start",
+            "Autonomous.Step7Finalize"
+        ]
+    },
+    "Autonomous.Step7Finalize": {
+        "action": "DoNothing",
+        "next": [
+            "Autonomous.ReportResults",
+            "Startup.CheckLobby"
+        ]
+    },
+    "Autonomous.ReportResults": {
+        "recognition": "OCR",
+        "roi": [
+            150,
+            20,
+            1200,
+            80
+        ],
+        "expected": [
+            "开始游戏",
+            "仓库",
+            "交易行"
+        ],
+        "action": "Custom",
+        "custom_action": "AutonomousReport",
+        "custom_action_param": {
+            "report_type": "daily_summary",
+            "webhook_enabled": true
+        },
+        "next": [
+            "Autonomous.PostRunAction"
+        ]
+    },
+    "Autonomous.PostRunAction": {
+        "action": "DoNothing",
+        "next": [
+            "Startup.CheckLobby"
+        ]
+    },
+    "Autonomous.EscLadder1": {
+        "action": "DoNothing",
+        "next": [
+            "CommonClosePopup",
+            "Autonomous.EscLadder2"
+        ]
+    },
+    "Autonomous.EscLadder2": {
+        "action": "DoNothing",
+        "next": [
+            "CommonEscReturn",
+            "Autonomous.EscLadder3"
+        ]
+    },
+    "Autonomous.EscLadder3": {
+        "action": "DoNothing",
+        "next": [
+            "CommonReturnLobby",
+            "Autonomous.EscLadder4"
+        ]
+    },
+    "Autonomous.EscLadder4": {
+        "action": "DoNothing",
+        "next": [
+            "CommonEmergencyEscape",
+            "Startup.CheckLobby"
+        ]
+    }
+}

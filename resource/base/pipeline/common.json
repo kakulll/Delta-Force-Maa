@@ -32,5 +32,143 @@
         ],
         "action": "Click",
         "post_delay": 500
+    },
+    "CommonEscReturn": {
+        "action": "ClickKey",
+        "key": 27,
+        "post_delay": 800,
+        "next": [
+            "CommonClosePopup",
+            "CommonReturnLobby",
+            "Startup.CheckLobby"
+        ]
+    },
+    "CommonEmergencyEscape": {
+        "action": "ClickKey",
+        "key": 27,
+        "post_delay": 600,
+        "next": [
+            "CommonEscReturn",
+            "CommonClosePopup",
+            "CommonReturnLobby",
+            "Startup.CheckLobby"
+        ]
+    },
+    "CommonDetectMaintenance": {
+        "recognition": "OCR",
+        "roi": [
+            500,
+            400,
+            1560,
+            400
+        ],
+        "expected": [
+            "服务器维护",
+            "系统维护",
+            "维护中",
+            "暂停服务",
+            "停服维护"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "CommonHandleMaintenance"
+        ]
+    },
+    "CommonHandleMaintenance": {
+        "recognition": "OCR",
+        "roi": [
+            700,
+            700,
+            1160,
+            300
+        ],
+        "expected": [
+            "确定",
+            "关闭",
+            "退出",
+            "知道了"
+        ],
+        "action": "Click",
+        "post_delay": 1000
+    },
+    "CommonDetectUpdate": {
+        "recognition": "OCR",
+        "roi": [
+            500,
+            400,
+            1560,
+            400
+        ],
+        "expected": [
+            "版本更新",
+            "强制更新",
+            "发现新版本",
+            "立即更新",
+            "下载更新"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "CommonHandleUpdate"
+        ]
+    },
+    "CommonHandleUpdate": {
+        "recognition": "OCR",
+        "roi": [
+            700,
+            700,
+            1160,
+            300
+        ],
+        "expected": [
+            "暂不更新",
+            "稍后",
+            "取消",
+            "关闭"
+        ],
+        "action": "Click",
+        "post_delay": 1000
+    },
+    "CommonDetectNetworkError": {
+        "recognition": "OCR",
+        "roi": [
+            500,
+            400,
+            1560,
+            400
+        ],
+        "expected": [
+            "网络连接失败",
+            "网络异常",
+            "连接超时",
+            "网络中断",
+            "连接失败",
+            "重新连接"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "CommonHandleNetworkRetry"
+        ]
+    },
+    "CommonHandleNetworkRetry": {
+        "recognition": "OCR",
+        "roi": [
+            700,
+            700,
+            1160,
+            300
+        ],
+        "expected": [
+            "重新连接",
+            "重试",
+            "确定",
+            "重新登录"
+        ],
+        "action": "Click",
+        "post_delay": 3000,
+        "next": [
+            "Startup.CheckLobby",
+            "Startup.CloseAnnouncement",
+            "CommonDetectNetworkError"
+        ]
     }
 }
