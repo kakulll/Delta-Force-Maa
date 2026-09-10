@@ -1,0 +1,82 @@
+{
+    "option": {
+        "WarehouseLiquidationMode": {
+            "type": "select",
+            "label": "清仓变现模式",
+            "description": "选择物品清仓的渠道与处理方式",
+            "default_case": "VendorSell",
+            "cases": [
+                {
+                    "name": "VendorSell",
+                    "label": "军需处极速回收（商人直接收购，秒变现）",
+                    "pipeline_override": {
+                        "Warehouse.CheckSellModal": {
+                            "next": [
+                                "Warehouse.VendorInstantSell"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "MarketList",
+                    "label": "交易行自动上架（税后最高收益，需占用售位）",
+                    "pipeline_override": {
+                        "Warehouse.CheckSellModal": {
+                            "next": [
+                                "Warehouse.MarketListSell"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "DryRun",
+                    "label": "安全预览（打开出售面板查看估值，不执行出售）",
+                    "pipeline_override": {
+                        "Warehouse.CheckSellModal": {
+                            "next": [
+                                "Warehouse.CancelSellModal"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        "WarehouseTransferBackpack": {
+            "type": "switch",
+            "label": "一键转移全部背包物品",
+            "description": "进入仓库后自动执行转移全部 (Ctrl+F)，清空背包装备进仓库",
+            "default_case": "Enabled",
+            "cases": [
+                {
+                    "name": "Enabled",
+                    "label": "开启",
+                    "pipeline_override": {
+                        "Warehouse.TransferAll": {
+                            "enabled": true
+                        }
+                    }
+                },
+                {
+                    "name": "Disabled",
+                    "label": "关闭",
+                    "pipeline_override": {
+                        "Warehouse.TransferAll": {
+                            "enabled": false
+                        }
+                    }
+                }
+            ]
+        }
+    },
+    "task": [
+        {
+            "name": "WarehouseClear",
+            "label": "自动清仓 (仓库整理/批量售卖/快速变现)",
+            "entry": "Warehouse.Start",
+            "option": [
+                "WarehouseLiquidationMode",
+                "WarehouseTransferBackpack"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,231 @@
+{
+    "option": {
+        "AmmoCaliberOption": {
+            "type": "select",
+            "label": "目标子弹口径",
+            "description": "选择要进行倒卖或低价监控的子弹口径",
+            "default_case": "Caliber556",
+            "cases": [
+                {
+                    "name": "Caliber556",
+                    "label": "5.56x45mm（主流步枪弹 M855/A1/M995）",
+                    "pipeline_override": {
+                        "AmmoFlip.OpenAmmoCategory": {
+                            "next": [
+                                "AmmoFlip.SelectCaliber556",
+                                "AmmoFlip.SelectFirstAmmoCard"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Caliber762x39",
+                    "label": "7.62x39mm（AK系列步枪弹 BP/AP/PS）",
+                    "pipeline_override": {
+                        "AmmoFlip.OpenAmmoCategory": {
+                            "next": [
+                                "AmmoFlip.SelectCaliber762x39",
+                                "AmmoFlip.SelectFirstAmmoCard"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Caliber762x51",
+                    "label": "7.62x51mm（大威力射手弹 M80/M62/M61）",
+                    "pipeline_override": {
+                        "AmmoFlip.OpenAmmoCategory": {
+                            "next": [
+                                "AmmoFlip.SelectCaliber762x51",
+                                "AmmoFlip.SelectFirstAmmoCard"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Caliber9x19",
+                    "label": "9x19mm（冲锋枪手枪弹 7N31/AP6.3/PBP）",
+                    "pipeline_override": {
+                        "AmmoFlip.OpenAmmoCategory": {
+                            "next": [
+                                "AmmoFlip.SelectCaliber9x19",
+                                "AmmoFlip.SelectFirstAmmoCard"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Caliber357",
+                    "label": ".357 Magnum（左轮高爆弹）",
+                    "pipeline_override": {
+                        "AmmoFlip.OpenAmmoCategory": {
+                            "next": [
+                                "AmmoFlip.SelectCaliber357",
+                                "AmmoFlip.SelectFirstAmmoCard"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        "AmmoMaxBuyPriceOption": {
+            "type": "select",
+            "label": "单发买入最高限价",
+            "description": "单发子弹价格低于或等于该值时自动抢购",
+            "default_case": "Price500",
+            "cases": [
+                {
+                    "name": "Price200",
+                    "label": "200 哈夫币（超低价捡漏）",
+                    "pipeline_override": {
+                        "AmmoFlip.EvaluatePrice": {
+                            "custom_recognition_param": {
+                                "max_price": 200
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Price400",
+                    "label": "400 哈夫币（平价囤货）",
+                    "pipeline_override": {
+                        "AmmoFlip.EvaluatePrice": {
+                            "custom_recognition_param": {
+                                "max_price": 400
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Price500",
+                    "label": "500 哈夫币（均衡推荐）",
+                    "pipeline_override": {
+                        "AmmoFlip.EvaluatePrice": {
+                            "custom_recognition_param": {
+                                "max_price": 500
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Price800",
+                    "label": "800 哈夫币（中高阶特种弹）",
+                    "pipeline_override": {
+                        "AmmoFlip.EvaluatePrice": {
+                            "custom_recognition_param": {
+                                "max_price": 800
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Price1200",
+                    "label": "1,200 哈夫币（穿甲高价值弹）",
+                    "pipeline_override": {
+                        "AmmoFlip.EvaluatePrice": {
+                            "custom_recognition_param": {
+                                "max_price": 1200
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        "AmmoFlipModeOption": {
+            "type": "select",
+            "label": "倒子弹工作流程",
+            "description": "控制倒子弹的全自动运转模式",
+            "default_case": "FullCycle",
+            "cases": [
+                {
+                    "name": "FullCycle",
+                    "label": "全循环（低价抢购 + 自动上架 + 收益领取）",
+                    "pipeline_override": {
+                        "AmmoFlip.Start": {
+                            "next": [
+                                "AmmoFlip.EnterTrading",
+                                "AmmoFlip.OpenAmmoCategory",
+                                "Startup.CheckLobby"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "BuyOnly",
+                    "label": "仅买入（低价扫货，不上架）",
+                    "pipeline_override": {
+                        "AmmoFlip.ConfirmBuyDialog": {
+                            "next": [
+                                "AmmoFlip.CloseDrawer",
+                                "CommonReturnLobby"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "SellOnly",
+                    "label": "仅出售（处理已购库存 + 收益领取）",
+                    "pipeline_override": {
+                        "AmmoFlip.Start": {
+                            "next": [
+                                "AmmoFlip.EnterTrading",
+                                "AmmoFlip.SwitchToSellTab"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        "AmmoFlipDryRunOption": {
+            "type": "select",
+            "label": "执行模式",
+            "description": "安全测试或实际执行资金操作",
+            "default_case": "RealAction",
+            "cases": [
+                {
+                    "name": "RealAction",
+                    "label": "实际执行（真实下单与真实上架）",
+                    "pipeline_override": {
+                        "AmmoFlip.ClickBuyDirect": {
+                            "enabled": true
+                        },
+                        "AmmoFlip.ConfirmBuyDialog": {
+                            "enabled": true
+                        },
+                        "AmmoFlip.ConfirmListingButton": {
+                            "enabled": true
+                        }
+                    }
+                },
+                {
+                    "name": "DryRun",
+                    "label": "仅预览监控（安全模式，不消耗资金）",
+                    "pipeline_override": {
+                        "AmmoFlip.ClickBuyDirect": {
+                            "enabled": false
+                        },
+                        "AmmoFlip.ConfirmBuyDialog": {
+                            "enabled": false
+                        },
+                        "AmmoFlip.ConfirmListingButton": {
+                            "enabled": false
+                        }
+                    }
+                }
+            ]
+        }
+    },
+    "task": [
+        {
+            "name": "AmmoFlip",
+            "label": "自动倒子弹 (低买高卖/自动上架/收益领取)",
+            "entry": "AmmoFlip.Start",
+            "option": [
+                "AmmoCaliberOption",
+                "AmmoMaxBuyPriceOption",
+                "AmmoFlipModeOption",
+                "AmmoFlipDryRunOption"
+            ]
+        }
+    ]
+}

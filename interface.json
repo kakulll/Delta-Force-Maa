@@ -24,7 +24,9 @@
         "./tasks/startup.json",
         "./tasks/daily.json",
         "./tasks/shelter.json",
-        "./tasks/trading.json"
+        "./tasks/trading.json",
+        "./tasks/ammo_flip.json",
+        "./tasks/warehouse.json"
     ],
     "agent": [
         {

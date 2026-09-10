@@ -1,0 +1,180 @@
+{
+    "Warehouse.Start": {
+        "action": "DoNothing",
+        "next": [
+            "Warehouse.EnterWarehouse",
+            "Warehouse.CheckOpened",
+            "Startup.CheckLobby"
+        ]
+    },
+    "Warehouse.EnterWarehouse": {
+        "recognition": "OCR",
+        "roi": [
+            380,
+            30,
+            100,
+            70
+        ],
+        "expected": [
+            "仓库"
+        ],
+        "action": "Click",
+        "post_delay": 1500,
+        "next": [
+            "Warehouse.CheckOpened"
+        ]
+    },
+    "Warehouse.CheckOpened": {
+        "recognition": "OCR",
+        "roi": [
+            1540,
+            110,
+            120,
+            60
+        ],
+        "expected": [
+            "仓库"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "Warehouse.TransferAll",
+            "Warehouse.ClickStashItemSlot1"
+        ]
+    },
+    "Warehouse.TransferAll": {
+        "recognition": "OCR",
+        "roi": [
+            300,
+            1520,
+            180,
+            50
+        ],
+        "expected": [
+            "转移全部"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "Warehouse.ClickStashItemSlot1"
+        ]
+    },
+    "Warehouse.ClickStashItemSlot1": {
+        "action": "Click",
+        "target": [
+            1650,
+            750,
+            100,
+            80
+        ],
+        "post_delay": 600,
+        "next": [
+            "Warehouse.ClickContextSell",
+            "Warehouse.ClickStashItemSlot2"
+        ]
+    },
+    "Warehouse.ClickStashItemSlot2": {
+        "action": "Click",
+        "target": [
+            1820,
+            750,
+            100,
+            80
+        ],
+        "post_delay": 600,
+        "next": [
+            "Warehouse.ClickContextSell",
+            "Warehouse.ClickStashItemSlot3"
+        ]
+    },
+    "Warehouse.ClickStashItemSlot3": {
+        "action": "Click",
+        "target": [
+            1990,
+            750,
+            100,
+            80
+        ],
+        "post_delay": 600,
+        "next": [
+            "Warehouse.ClickContextSell",
+            "CommonReturnLobby"
+        ]
+    },
+    "Warehouse.ClickContextSell": {
+        "recognition": "OCR",
+        "roi": [
+            1160,
+            1050,
+            120,
+            60
+        ],
+        "expected": [
+            "出售"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "Warehouse.CheckSellModal"
+        ]
+    },
+    "Warehouse.CheckSellModal": {
+        "recognition": "OCR",
+        "roi": [
+            450,
+            350,
+            200,
+            80
+        ],
+        "expected": [
+            "出售"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "Warehouse.VendorInstantSell",
+            "Warehouse.MarketListSell",
+            "Warehouse.CancelSellModal"
+        ]
+    },
+    "Warehouse.VendorInstantSell": {
+        "recognition": "OCR",
+        "roi": [
+            1820,
+            660,
+            100,
+            60
+        ],
+        "expected": [
+            "出售"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "CommonReturnLobby"
+        ]
+    },
+    "Warehouse.MarketListSell": {
+        "recognition": "OCR",
+        "roi": [
+            1820,
+            970,
+            100,
+            60
+        ],
+        "expected": [
+            "上架"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "CommonReturnLobby"
+        ]
+    },
+    "Warehouse.CancelSellModal": {
+        "action": "ClickKey",
+        "key": 27,
+        "post_delay": 500,
+        "next": [
+            "CommonReturnLobby"
+        ]
+    }
+}
