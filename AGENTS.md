@@ -3,7 +3,7 @@
 ## Git Commit 规范
 
 每次完成重要的代码修改并验证通过后：
-1. **主动提示或协助执行 `git commit`**。
+1. **自主执行 `git commit`**：无需额外询问，完成修改验证后直接执行 `git commit`，并在回复中简要汇报提交哈希与信息。
 2. **提交信息规范**：严格遵循 [Conventional Commits](https://www.conventionalcommits.org/) 规范，格式如下：
    - `feat: <新功能描述>`：新增功能或能力
    - `fix: <修复描述>`：修复缺陷或 bug
