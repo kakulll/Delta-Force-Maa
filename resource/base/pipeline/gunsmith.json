@@ -1,0 +1,899 @@
+{
+    "Gunsmith.Start": {
+        "action": "DoNothing",
+        "next": [
+            "Gunsmith.EnterWorkbench",
+            "Gunsmith.CheckWorkbenchOpened",
+            "Startup.CheckLobby"
+        ],
+        "on_error": [
+            "Gunsmith.ReturnToLobby"
+        ]
+    },
+    "Gunsmith.EnterWorkbench": {
+        "recognition": "OCR",
+        "roi": [
+            1220,
+            30,
+            140,
+            80
+        ],
+        "expected": [
+            "改枪台"
+        ],
+        "action": "Click",
+        "post_delay": 1500,
+        "next": [
+            "Gunsmith.CheckWorkbenchOpened"
+        ],
+        "on_error": [
+            "Gunsmith.ReturnToLobby"
+        ]
+    },
+    "Gunsmith.CheckWorkbenchOpened": {
+        "recognition": "OCR",
+        "roi": [
+            100,
+            40,
+            600,
+            140
+        ],
+        "expected": [
+            "武器方案",
+            "改枪台",
+            "方案码",
+            "基础属性",
+            "改装"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "Gunsmith.SelectWeaponCategory",
+            "Gunsmith.SelectTargetWeapon",
+            "Gunsmith.OpenPresetBlueprints",
+            "Gunsmith.CheckAttachmentSlots"
+        ],
+        "on_error": [
+            "Gunsmith.ReturnToLobby"
+        ]
+    },
+    "Gunsmith.SelectWeaponCategory": {
+        "recognition": "OCR",
+        "roi": [
+            100,
+            150,
+            400,
+            200
+        ],
+        "expected": [
+            "突击步枪",
+            "冲锋枪",
+            "狙击步枪",
+            "射手步枪"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "Gunsmith.SelectTargetWeapon"
+        ],
+        "on_error": [
+            "Gunsmith.SelectTargetWeapon"
+        ]
+    },
+    "Gunsmith.SelectTargetWeapon": {
+        "recognition": "OCR",
+        "roi": [
+            180,
+            180,
+            600,
+            400
+        ],
+        "expected": [
+            "M4A1",
+            "HK416",
+            "Vector",
+            "AWM"
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "next": [
+            "Gunsmith.OpenPresetBlueprints",
+            "Gunsmith.CheckAttachmentSlots"
+        ],
+        "on_error": [
+            "Gunsmith.OpenPresetBlueprints"
+        ]
+    },
+    "Gunsmith.OpenPresetBlueprints": {
+        "recognition": "OCR",
+        "roi": [
+            180,
+            120,
+            200,
+            60
+        ],
+        "expected": [
+            "方案",
+            "改装方案",
+            "预设方案"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "Gunsmith.SelectBuildPreset",
+            "Gunsmith.CheckAttachmentSlots"
+        ],
+        "on_error": [
+            "Gunsmith.CheckAttachmentSlots"
+        ]
+    },
+    "Gunsmith.SelectBuildPreset": {
+        "recognition": "OCR",
+        "roi": [
+            180,
+            200,
+            500,
+            300
+        ],
+        "expected": [
+            "全面平衡方案",
+            "全面平衡",
+            "极限后坐力控制方案",
+            "极限后坐力",
+            "极速人机/腰射方案",
+            "极速人机"
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "next": [
+            "Gunsmith.CheckAttachmentSlots",
+            "Gunsmith.ClickQuickAssemble"
+        ],
+        "on_error": [
+            "Gunsmith.CheckAttachmentSlots"
+        ]
+    },
+    "Gunsmith.CheckAttachmentSlots": {
+        "recognition": "OCR",
+        "roi": [
+            200,
+            300,
+            1000,
+            900
+        ],
+        "expected": [
+            "配件",
+            "槽位",
+            "枪口",
+            "枪管",
+            "握把",
+            "弹匣",
+            "枪托",
+            "瞄具"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "Gunsmith.InspectMuzzleSlot",
+            "Gunsmith.InspectBarrelSlot",
+            "Gunsmith.InspectGripSlot",
+            "Gunsmith.InspectMagSlot",
+            "Gunsmith.InspectStockSlot",
+            "Gunsmith.InspectOpticSlot",
+            "Gunsmith.ClickQuickAssemble"
+        ],
+        "on_error": [
+            "Gunsmith.ClickQuickAssemble"
+        ]
+    },
+    "Gunsmith.InspectMuzzleSlot": {
+        "recognition": "OCR",
+        "roi": [
+            200,
+            350,
+            400,
+            100
+        ],
+        "expected": [
+            "枪口",
+            "战术补偿器",
+            "重型消音器",
+            "轻量枪口",
+            "补偿器",
+            "消音器"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "Gunsmith.InspectBarrelSlot",
+            "Gunsmith.ClickQuickAssemble"
+        ],
+        "on_error": [
+            "Gunsmith.InspectBarrelSlot"
+        ]
+    },
+    "Gunsmith.InspectBarrelSlot": {
+        "recognition": "OCR",
+        "roi": [
+            200,
+            460,
+            400,
+            100
+        ],
+        "expected": [
+            "枪管",
+            "长枪管",
+            "短枪管",
+            "轻量枪管",
+            "战术枪管"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "Gunsmith.InspectGripSlot",
+            "Gunsmith.ClickQuickAssemble"
+        ],
+        "on_error": [
+            "Gunsmith.InspectGripSlot"
+        ]
+    },
+    "Gunsmith.InspectGripSlot": {
+        "recognition": "OCR",
+        "roi": [
+            200,
+            570,
+            400,
+            100
+        ],
+        "expected": [
+            "前握把",
+            "战术握把",
+            "垂直握把",
+            "斜角握把",
+            "握把"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "Gunsmith.InspectMagSlot",
+            "Gunsmith.ClickQuickAssemble"
+        ],
+        "on_error": [
+            "Gunsmith.InspectMagSlot"
+        ]
+    },
+    "Gunsmith.InspectMagSlot": {
+        "recognition": "OCR",
+        "roi": [
+            200,
+            680,
+            400,
+            100
+        ],
+        "expected": [
+            "弹匣",
+            "扩容弹匣",
+            "快速弹匣",
+            "60发弹鼓",
+            "弹鼓"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "Gunsmith.InspectStockSlot",
+            "Gunsmith.ClickQuickAssemble"
+        ],
+        "on_error": [
+            "Gunsmith.InspectStockSlot"
+        ]
+    },
+    "Gunsmith.InspectStockSlot": {
+        "recognition": "OCR",
+        "roi": [
+            200,
+            790,
+            400,
+            100
+        ],
+        "expected": [
+            "枪托",
+            "战术枪托",
+            "轻量枪托",
+            "精准枪托",
+            "重型枪托"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "Gunsmith.InspectOpticSlot",
+            "Gunsmith.ClickQuickAssemble"
+        ],
+        "on_error": [
+            "Gunsmith.InspectOpticSlot"
+        ]
+    },
+    "Gunsmith.InspectOpticSlot": {
+        "recognition": "OCR",
+        "roi": [
+            200,
+            900,
+            400,
+            100
+        ],
+        "expected": [
+            "瞄具",
+            "全息瞄准镜",
+            "红点瞄具",
+            "高倍瞄具",
+            "战术瞄具"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "Gunsmith.ClickQuickAssemble"
+        ],
+        "on_error": [
+            "Gunsmith.ClickQuickAssemble"
+        ]
+    },
+    "Gunsmith.ClickQuickAssemble": {
+        "recognition": "OCR",
+        "roi": [
+            2050,
+            1450,
+            250,
+            70
+        ],
+        "expected": [
+            "快捷组装",
+            "一键组装",
+            "组装",
+            "一键改枪"
+        ],
+        "action": "Click",
+        "post_delay": 1200,
+        "next": [
+            "Gunsmith.CheckMissingPartsModal",
+            "Gunsmith.CheckQuickAssembleModal",
+            "Gunsmith.ConfirmAssemble"
+        ],
+        "on_error": [
+            "Gunsmith.ConfirmAssemble"
+        ]
+    },
+    "Gunsmith.CheckMissingPartsModal": {
+        "recognition": "OCR",
+        "roi": [
+            700,
+            300,
+            1160,
+            900
+        ],
+        "expected": [
+            "缺少配件",
+            "配件不足",
+            "快捷购买",
+            "补齐配件",
+            "未拥有"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "Gunsmith.DetectMissingParts",
+            "Gunsmith.ClickBuyMissingParts",
+            "Gunsmith.CancelModal"
+        ],
+        "on_error": [
+            "Gunsmith.ConfirmAssemble"
+        ]
+    },
+    "Gunsmith.DetectMissingParts": {
+        "recognition": "OCR",
+        "roi": [
+            800,
+            400,
+            960,
+            600
+        ],
+        "expected": [
+            "缺少",
+            "购买并装配",
+            "快捷补齐",
+            "配件不足",
+            "缺件清单"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "Gunsmith.ClickBuyMissingParts",
+            "Gunsmith.JumpToTrading",
+            "Gunsmith.CancelModal"
+        ],
+        "on_error": [
+            "Gunsmith.CancelModal"
+        ]
+    },
+    "Gunsmith.ClickBuyMissingParts": {
+        "recognition": "OCR",
+        "roi": [
+            1300,
+            1100,
+            350,
+            80
+        ],
+        "expected": [
+            "快捷购买",
+            "购买并装配",
+            "购买缺失",
+            "确认购买"
+        ],
+        "action": "Click",
+        "post_delay": 1500,
+        "max_hit": 5,
+        "next": [
+            "Gunsmith.JumpToTrading",
+            "Gunsmith.CheckTradingHouseOpened",
+            "Gunsmith.ConfirmBuyDialog",
+            "Gunsmith.CheckPurchaseSuccess",
+            "Gunsmith.CancelModal"
+        ],
+        "on_error": [
+            "Gunsmith.CancelModal"
+        ]
+    },
+    "Gunsmith.JumpToTrading": {
+        "recognition": "OCR",
+        "roi": [
+            880,
+            30,
+            140,
+            80
+        ],
+        "expected": [
+            "交易行",
+            "前往交易行"
+        ],
+        "action": "Click",
+        "post_delay": 1500,
+        "max_hit": 5,
+        "next": [
+            "Gunsmith.CheckTradingHouseOpened"
+        ],
+        "on_error": [
+            "Gunsmith.ReturnToWorkbench"
+        ]
+    },
+    "Gunsmith.CheckTradingHouseOpened": {
+        "recognition": "OCR",
+        "roi": [
+            100,
+            100,
+            350,
+            250
+        ],
+        "expected": [
+            "购买",
+            "出售",
+            "配件",
+            "交易行"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "Gunsmith.SearchAttachmentItemBox",
+            "Gunsmith.SelectAttachmentItemRow",
+            "Gunsmith.ConfirmBuyDialog"
+        ],
+        "on_error": [
+            "Gunsmith.ReturnToWorkbench"
+        ]
+    },
+    "Gunsmith.SearchAttachmentItemBox": {
+        "recognition": "OCR",
+        "roi": [
+            100,
+            200,
+            300,
+            70
+        ],
+        "expected": [
+            "请输入想要查找的商品",
+            "查找",
+            "商品"
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "Gunsmith.SearchAttachmentInput"
+        ],
+        "on_error": [
+            "Gunsmith.SelectAttachmentItemRow"
+        ]
+    },
+    "Gunsmith.SearchAttachmentInput": {
+        "action": "InputText",
+        "input_text": "战术消音器",
+        "post_delay": 500,
+        "next": [
+            "Gunsmith.ConfirmSearchAttachment"
+        ],
+        "on_error": [
+            "Gunsmith.SelectAttachmentItemRow"
+        ]
+    },
+    "Gunsmith.ConfirmSearchAttachment": {
+        "action": "ClickKey",
+        "key": 13,
+        "post_delay": 800,
+        "next": [
+            "Gunsmith.SelectAttachmentItemRow"
+        ],
+        "on_error": [
+            "Gunsmith.SelectAttachmentItemRow"
+        ]
+    },
+    "Gunsmith.SelectAttachmentItemRow": {
+        "recognition": "OCR",
+        "roi": [
+            400,
+            250,
+            1600,
+            800
+        ],
+        "expected": [
+            "配件",
+            "单价",
+            "哈夫币",
+            "购买"
+        ],
+        "action": "Click",
+        "target": [
+            2050,
+            400,
+            150,
+            60
+        ],
+        "post_delay": 800,
+        "max_hit": 5,
+        "next": [
+            "Gunsmith.ConfirmBuyDialog",
+            "Gunsmith.CheckMarketOutOfStock"
+        ],
+        "on_error": [
+            "Gunsmith.CheckMarketOutOfStock"
+        ]
+    },
+    "Gunsmith.ConfirmBuyDialog": {
+        "recognition": "OCR",
+        "roi": [
+            800,
+            800,
+            800,
+            300
+        ],
+        "expected": [
+            "确认购买",
+            "确定",
+            "购买"
+        ],
+        "action": "Click",
+        "post_delay": 1200,
+        "max_hit": 5,
+        "next": [
+            "Gunsmith.CheckPurchaseSuccess",
+            "Gunsmith.CheckMarketOutOfStock",
+            "Gunsmith.CheckInsufficientFunds"
+        ],
+        "on_error": [
+            "Gunsmith.CheckMarketOutOfStock"
+        ]
+    },
+    "Gunsmith.CheckPurchaseSuccess": {
+        "recognition": "OCR",
+        "roi": [
+            800,
+            600,
+            960,
+            400
+        ],
+        "expected": [
+            "购买成功",
+            "获得物品",
+            "已存入",
+            "装配就绪"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "CommonClosePopup",
+            "Gunsmith.ReturnToWorkbench"
+        ],
+        "on_error": [
+            "Gunsmith.ReturnToWorkbench"
+        ]
+    },
+    "Gunsmith.CheckMarketOutOfStock": {
+        "recognition": "OCR",
+        "roi": [
+            800,
+            600,
+            960,
+            400
+        ],
+        "expected": [
+            "售罄",
+            "已售罄",
+            "商品已下架",
+            "库存不足",
+            "暂无商品",
+            "无法购买"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "CommonClosePopup",
+            "Gunsmith.CancelModal",
+            "Gunsmith.ReturnToLobby",
+            "Gunsmith.ReturnToWorkbench"
+        ],
+        "on_error": [
+            "Gunsmith.ReturnToWorkbench"
+        ]
+    },
+    "Gunsmith.CheckInsufficientFunds": {
+        "recognition": "OCR",
+        "roi": [
+            800,
+            600,
+            960,
+            400
+        ],
+        "expected": [
+            "余额不足",
+            "哈夫币不足",
+            "货币不足"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "CommonClosePopup",
+            "Gunsmith.CancelModal",
+            "Gunsmith.ReturnToLobby"
+        ],
+        "on_error": [
+            "Gunsmith.ReturnToLobby"
+        ]
+    },
+    "Gunsmith.ReturnToWorkbench": {
+        "recognition": "OCR",
+        "roi": [
+            1220,
+            30,
+            140,
+            80
+        ],
+        "expected": [
+            "改枪台"
+        ],
+        "action": "Click",
+        "post_delay": 1500,
+        "max_hit": 5,
+        "next": [
+            "Gunsmith.AssembleAttachments",
+            "Gunsmith.ConfirmAssemble",
+            "Gunsmith.CheckWorkbenchOpened"
+        ],
+        "on_error": [
+            "Gunsmith.ReturnToLobby"
+        ]
+    },
+    "Gunsmith.AssembleAttachments": {
+        "recognition": "OCR",
+        "roi": [
+            2050,
+            1450,
+            250,
+            70
+        ],
+        "expected": [
+            "装配",
+            "快捷装配",
+            "一键装配",
+            "应用方案"
+        ],
+        "action": "Click",
+        "post_delay": 1200,
+        "max_hit": 5,
+        "next": [
+            "Gunsmith.ConfirmAssemble",
+            "Gunsmith.ConfirmModifications",
+            "Gunsmith.CheckQuickAssembleModal"
+        ],
+        "on_error": [
+            "Gunsmith.ConfirmAssemble"
+        ]
+    },
+    "Gunsmith.CheckQuickAssembleModal": {
+        "recognition": "OCR",
+        "roi": [
+            800,
+            700,
+            960,
+            400
+        ],
+        "expected": [
+            "确认装配",
+            "改装确认",
+            "方案装配"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "Gunsmith.ConfirmAssemble",
+            "Gunsmith.CancelModal"
+        ],
+        "on_error": [
+            "Gunsmith.CancelModal"
+        ]
+    },
+    "Gunsmith.ConfirmAssemble": {
+        "recognition": "OCR",
+        "roi": [
+            1300,
+            1100,
+            250,
+            70
+        ],
+        "expected": [
+            "确认",
+            "确定",
+            "装配",
+            "立即装配"
+        ],
+        "action": "Click",
+        "post_delay": 1200,
+        "max_hit": 5,
+        "next": [
+            "Gunsmith.ConfirmModifications",
+            "Gunsmith.DismissSettlementModal",
+            "Gunsmith.CheckAssemblySuccess",
+            "Gunsmith.CancelModal"
+        ],
+        "on_error": [
+            "Gunsmith.CancelModal"
+        ]
+    },
+    "Gunsmith.ConfirmModifications": {
+        "recognition": "OCR",
+        "roi": [
+            2050,
+            1450,
+            250,
+            70
+        ],
+        "expected": [
+            "保存方案",
+            "应用改装",
+            "确认修改",
+            "保存"
+        ],
+        "action": "Click",
+        "post_delay": 1200,
+        "max_hit": 5,
+        "next": [
+            "Gunsmith.DismissSettlementModal",
+            "Gunsmith.CheckAssemblySuccess",
+            "Gunsmith.CancelModal"
+        ],
+        "on_error": [
+            "Gunsmith.CancelModal"
+        ]
+    },
+    "Gunsmith.CheckAssemblySuccess": {
+        "recognition": "OCR",
+        "roi": [
+            800,
+            600,
+            960,
+            400
+        ],
+        "expected": [
+            "装配成功",
+            "保存成功",
+            "改装完成",
+            "方案已保存"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "CommonClosePopup",
+            "Gunsmith.DismissSettlementModal",
+            "Gunsmith.ReturnToLobby"
+        ],
+        "on_error": [
+            "Gunsmith.ReturnToLobby"
+        ]
+    },
+    "Gunsmith.DismissSettlementModal": {
+        "recognition": "OCR",
+        "roi": [
+            1000,
+            1350,
+            560,
+            150
+        ],
+        "expected": [
+            "点击空白处关闭",
+            "点击任意位置关闭",
+            "确定",
+            "完成"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "max_hit": 5,
+        "next": [
+            "Gunsmith.ReturnToLobby",
+            "Startup.CheckLobby"
+        ],
+        "on_error": [
+            "Gunsmith.ReturnToLobby"
+        ]
+    },
+    "Gunsmith.CancelModal": {
+        "recognition": "DirectHit",
+        "action": "ClickKey",
+        "key": 27,
+        "post_delay": 800,
+        "max_hit": 3,
+        "next": [
+            "Gunsmith.ReturnToLobby",
+            "Gunsmith.SubpageReturn",
+            "Startup.CheckLobby"
+        ],
+        "on_error": [
+            "Gunsmith.ReturnToLobby"
+        ]
+    },
+    "Gunsmith.ReturnToLobby": {
+        "recognition": "OCR",
+        "roi": [
+            180,
+            40,
+            160,
+            60
+        ],
+        "expected": [
+            "开始游戏",
+            "返回"
+        ],
+        "action": "Click",
+        "post_delay": 1200,
+        "next": [
+            "Startup.CheckLobby",
+            "Gunsmith.SubpageReturn"
+        ],
+        "on_error": [
+            "Gunsmith.SubpageReturn"
+        ]
+    },
+    "Gunsmith.SubpageReturn": {
+        "recognition": "OCR",
+        "roi": [
+            120,
+            1520,
+            120,
+            70
+        ],
+        "expected": [
+            "返回",
+            "Esc",
+            "ESC"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "max_hit": 3,
+        "next": [
+            "Startup.CheckLobby",
+            "Gunsmith.EscReturn"
+        ],
+        "on_error": [
+            "Gunsmith.EscReturn"
+        ]
+    },
+    "Gunsmith.EscReturn": {
+        "action": "ClickKey",
+        "key": 27,
+        "post_delay": 800,
+        "max_hit": 3,
+        "next": [
+            "Startup.CheckLobby"
+        ],
+        "on_error": [
+            "Startup.CheckLobby"
+        ]
+    }
+}

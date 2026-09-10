@@ -1,0 +1,231 @@
+{
+    "option": {
+        "GunsmithWeaponOption": {
+            "type": "select",
+            "label": "目标改装枪械",
+            "description": "选择需要自动组装或改装的目标武器型号 (M4A1 / HK416 / Vector / AWM)",
+            "default_case": "WeaponM4A1",
+            "cases": [
+                {
+                    "name": "WeaponM4A1",
+                    "label": "M4A1 突击步枪",
+                    "description": "全自动突击步枪，通用性极强",
+                    "pipeline_override": {
+                        "Gunsmith.SelectTargetWeapon": {
+                            "expected": [
+                                "M4A1",
+                                "M4A1突击步枪"
+                            ]
+                        },
+                        "Gunsmith.SearchAttachmentInput": {
+                            "input_text": "M4A1战术消音器"
+                        }
+                    }
+                },
+                {
+                    "name": "WeaponHK416",
+                    "label": "HK416 突击步枪",
+                    "description": "高射速高精度全自动突击步枪",
+                    "pipeline_override": {
+                        "Gunsmith.SelectTargetWeapon": {
+                            "expected": [
+                                "HK416",
+                                "HK416突击步枪"
+                            ]
+                        },
+                        "Gunsmith.SearchAttachmentInput": {
+                            "input_text": "HK416长枪管"
+                        }
+                    }
+                },
+                {
+                    "name": "WeaponVector",
+                    "label": "Vector 冲锋枪",
+                    "description": "超高射速冲锋枪，近距离爆发利器",
+                    "pipeline_override": {
+                        "Gunsmith.SelectTargetWeapon": {
+                            "expected": [
+                                "Vector",
+                                "Vector冲锋枪"
+                            ]
+                        },
+                        "Gunsmith.SearchAttachmentInput": {
+                            "input_text": "Vector大容量弹匣"
+                        }
+                    }
+                },
+                {
+                    "name": "WeaponAWM",
+                    "label": "AWM 狙击步枪",
+                    "description": "重型高威力栓动狙击步枪，一击必杀",
+                    "pipeline_override": {
+                        "Gunsmith.SelectTargetWeapon": {
+                            "expected": [
+                                "AWM",
+                                "AWM狙击步枪"
+                            ]
+                        },
+                        "Gunsmith.SearchAttachmentInput": {
+                            "input_text": "AWM高倍瞄具"
+                        }
+                    }
+                }
+            ]
+        },
+        "GunsmithBuildPresetOption": {
+            "type": "select",
+            "label": "改装方案预设 (Blueprints)",
+            "description": "选择目标枪械的装配蓝图（全面平衡/极限后坐力/极速人机）",
+            "default_case": "BuildBalanced",
+            "cases": [
+                {
+                    "name": "BuildBalanced",
+                    "label": "全面平衡方案 (Balanced)",
+                    "description": "均衡兼顾垂直后坐力、水平后坐力与开镜人机速度",
+                    "pipeline_override": {
+                        "Gunsmith.SelectBuildPreset": {
+                            "expected": [
+                                "全面平衡方案",
+                                "全面平衡"
+                            ]
+                        },
+                        "Gunsmith.InspectMuzzleSlot": {
+                            "expected": [
+                                "战术补偿器",
+                                "平衡枪口"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "BuildRecoilControl",
+                    "label": "极限后坐力控制方案 (RecoilControl)",
+                    "description": "极限压低后坐力散射，适合中远距离稳定连发射击",
+                    "pipeline_override": {
+                        "Gunsmith.SelectBuildPreset": {
+                            "expected": [
+                                "极限后坐力控制方案",
+                                "极限后坐力",
+                                "后坐力控制"
+                            ]
+                        },
+                        "Gunsmith.InspectMuzzleSlot": {
+                            "expected": [
+                                "重型消音器",
+                                "后坐抑制器"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "BuildHipFireErgo",
+                    "label": "极速人机/腰射方案 (HipFireErgo)",
+                    "description": "极速举镜开火与移动腰射，近战近身缠斗优势明显",
+                    "pipeline_override": {
+                        "Gunsmith.SelectBuildPreset": {
+                            "expected": [
+                                "极速人机/腰射方案",
+                                "极速人机",
+                                "腰射优化"
+                            ]
+                        },
+                        "Gunsmith.InspectMuzzleSlot": {
+                            "expected": [
+                                "轻量枪口",
+                                "短款消焰器"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        "GunsmithAutoBuyOption": {
+            "type": "select",
+            "label": "缺件自动交易行采购 (AutoBuy)",
+            "description": "改装时若检测到缺少配件，是否自动跳转交易行采购补齐",
+            "default_case": "Enabled",
+            "cases": [
+                {
+                    "name": "Enabled",
+                    "label": "开启自动采购 (Enabled)",
+                    "description": "自动检测缺少配件并跳转交易行一键购买补齐后继续组装",
+                    "pipeline_override": {
+                        "Gunsmith.JumpToTrading": {
+                            "enabled": true
+                        },
+                        "Gunsmith.ClickBuyMissingParts": {
+                            "enabled": true
+                        }
+                    }
+                },
+                {
+                    "name": "Disabled",
+                    "label": "关闭自动采购 (Disabled)",
+                    "description": "关闭交易行自动采购，缺件时跳过采购或安全取消",
+                    "pipeline_override": {
+                        "Gunsmith.JumpToTrading": {
+                            "enabled": false
+                        },
+                        "Gunsmith.ClickBuyMissingParts": {
+                            "enabled": false
+                        }
+                    }
+                }
+            ]
+        },
+        "GunsmithDryRunOption": {
+            "type": "select",
+            "label": "改枪执行模式 (DryRun vs RealAssemble)",
+            "description": "安全预览模式或实装扣费模式。DryRun 模式下禁用购买与改装确认，安全退回大厅",
+            "default_case": "DryRun",
+            "cases": [
+                {
+                    "name": "DryRun",
+                    "label": "安全预览模式 (DryRun 零改动/零扣费)",
+                    "description": "执行配方解析、槽位检测与缺件统计，不执行任何交易行扣费与方案保存，安全通过 CancelModal 退回大厅",
+                    "pipeline_override": {
+                        "Gunsmith.ConfirmAssemble": {
+                            "enabled": false
+                        },
+                        "Gunsmith.ClickBuyMissingParts": {
+                            "enabled": false
+                        },
+                        "Gunsmith.ConfirmModifications": {
+                            "enabled": false
+                        }
+                    }
+                },
+                {
+                    "name": "RealAssemble",
+                    "label": "实际组装模式 (RealAssemble 实装扣费)",
+                    "description": "自动采购缺少配件并最终确认装配应用方案，完成整枪改装与方案保存",
+                    "pipeline_override": {
+                        "Gunsmith.ConfirmAssemble": {
+                            "enabled": true
+                        },
+                        "Gunsmith.ClickBuyMissingParts": {
+                            "enabled": true
+                        },
+                        "Gunsmith.ConfirmModifications": {
+                            "enabled": true
+                        }
+                    }
+                }
+            ]
+        }
+    },
+    "task": [
+        {
+            "name": "GunsmithWorkbench",
+            "label": "改枪台自动化",
+            "description": "在改枪台实现枪械配方的自动化组装流程：选择武器与方案蓝图、检测槽位配件与缺件、支持自动交易行补齐、完成全枪装配并保存确认，支持DryRun安全预览与4级Esc安全回退。",
+            "entry": "Gunsmith.Start",
+            "option": [
+                "GunsmithWeaponOption",
+                "GunsmithBuildPresetOption",
+                "GunsmithAutoBuyOption",
+                "GunsmithDryRunOption"
+            ]
+        }
+    ]
+}

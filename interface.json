@@ -29,7 +29,8 @@
         "./tasks/warehouse.json",
         "./tasks/department.json",
         "./tasks/keycard.json",
-        "./tasks/loadout.json"
+        "./tasks/loadout.json",
+        "./tasks/gunsmith.json"
     ],
     "agent": [
         {
