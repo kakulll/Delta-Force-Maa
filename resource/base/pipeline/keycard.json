@@ -1,0 +1,538 @@
+{
+    "Keycard.Start": {
+        "action": "DoNothing",
+        "next": [
+            "Keycard.EnterTrading",
+            "Keycard.CheckTradingOpen",
+            "Startup.CheckLobby"
+        ],
+        "on_error": [
+            "Keycard.ReturnToLobby"
+        ]
+    },
+    "Keycard.EnterTrading": {
+        "recognition": "OCR",
+        "roi": [
+            880,
+            30,
+            140,
+            80
+        ],
+        "expected": [
+            "交易行"
+        ],
+        "action": "Click",
+        "post_delay": 1000,
+        "next": [
+            "Keycard.CheckTradingOpen"
+        ],
+        "on_error": [
+            "Keycard.ReturnToLobby"
+        ]
+    },
+    "Keycard.CheckTradingOpen": {
+        "recognition": "OCR",
+        "roi": [
+            100,
+            100,
+            350,
+            250
+        ],
+        "expected": [
+            "购买",
+            "出售",
+            "收藏"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "Keycard.SelectCategoryKeycard",
+            "Keycard.SearchCardBox"
+        ],
+        "on_error": [
+            "Keycard.ReturnToLobby"
+        ]
+    },
+    "Keycard.SelectCategoryKeycard": {
+        "recognition": "OCR",
+        "roi": [
+            100,
+            450,
+            150,
+            80
+        ],
+        "expected": [
+            "钥匙",
+            "门卡",
+            "钥匙卡"
+        ],
+        "action": "Click",
+        "post_delay": 600,
+        "next": [
+            "Keycard.SelectTargetKeycard",
+            "Keycard.SearchCardBox"
+        ],
+        "on_error": [
+            "Keycard.SearchCardBox"
+        ]
+    },
+    "Keycard.SearchCardBox": {
+        "recognition": "OCR",
+        "roi": [
+            100,
+            200,
+            300,
+            70
+        ],
+        "expected": [
+            "请输入想要查找的商品",
+            "查找",
+            "商品"
+        ],
+        "action": "Click",
+        "post_delay": 400,
+        "next": [
+            "Keycard.SearchCardName"
+        ],
+        "on_error": [
+            "Keycard.SelectTargetKeycard",
+            "Keycard.ReturnToLobby"
+        ]
+    },
+    "Keycard.SearchCardName": {
+        "action": "InputText",
+        "input_text": "航天基地核心区",
+        "post_delay": 300,
+        "next": [
+            "Keycard.ConfirmSearch"
+        ]
+    },
+    "Keycard.ConfirmSearch": {
+        "action": "ClickKey",
+        "key": 13,
+        "post_delay": 600,
+        "next": [
+            "Keycard.SelectTargetKeycard",
+            "Keycard.SelectFirstItem"
+        ],
+        "on_error": [
+            "Keycard.ReturnToLobby"
+        ]
+    },
+    "Keycard.SelectTargetKeycard": {
+        "recognition": "OCR",
+        "roi": [
+            400,
+            200,
+            600,
+            1200
+        ],
+        "expected": [
+            "航天基地核心区红卡",
+            "航天基地",
+            "核心区",
+            "红卡",
+            "金卡"
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "Keycard.SelectFirstItem",
+            "Keycard.EvaluatePrice"
+        ],
+        "on_error": [
+            "Keycard.SelectFirstItem",
+            "Keycard.RefreshList"
+        ]
+    },
+    "Keycard.SelectFirstItem": {
+        "action": "Click",
+        "target": [
+            750,
+            250,
+            100,
+            60
+        ],
+        "post_delay": 400,
+        "next": [
+            "Keycard.EvaluatePrice",
+            "Keycard.RefreshList"
+        ],
+        "on_error": [
+            "Keycard.RefreshList"
+        ]
+    },
+    "Keycard.OcrPrice": {
+        "recognition": "OCR",
+        "roi": [
+            200,
+            220,
+            350,
+            50
+        ],
+        "replace": [
+            [
+                "O",
+                "0"
+            ],
+            [
+                "Q",
+                "0"
+            ],
+            [
+                "D",
+                "0"
+            ],
+            [
+                ",",
+                ""
+            ],
+            [
+                ".",
+                ""
+            ]
+        ],
+        "action": "DoNothing"
+    },
+    "Keycard.EvaluatePrice": {
+        "recognition": "Custom",
+        "custom_recognition": "PriceEvaluator",
+        "custom_recognition_param": {
+            "ocr_node": "Keycard.OcrPrice",
+            "max_price": 1000000,
+            "min_price": 500
+        },
+        "action": "DoNothing",
+        "next": [
+            "Keycard.ClickBuyDirect",
+            "Keycard.CloseDrawer",
+            "Keycard.RefreshList"
+        ],
+        "on_error": [
+            "Keycard.CloseDrawer",
+            "Keycard.RefreshList"
+        ]
+    },
+    "Keycard.ClickBuyDirect": {
+        "action": "Click",
+        "target": [
+            2150,
+            1470,
+            100,
+            40
+        ],
+        "post_delay": 300,
+        "next": [
+            "Keycard.MaxQuantity",
+            "Keycard.SelectMaxQuantity",
+            "Keycard.ConfirmBuyDialog",
+            "Keycard.CloseDrawer",
+            "Keycard.RefreshList"
+        ],
+        "on_error": [
+            "Keycard.CloseDrawer",
+            "Keycard.RefreshList"
+        ]
+    },
+    "Keycard.MaxQuantity": {
+        "action": "Click",
+        "target": [
+            2280,
+            1210,
+            30,
+            30
+        ],
+        "post_delay": 150,
+        "next": [
+            "Keycard.ConfirmBuyDialog"
+        ]
+    },
+    "Keycard.SelectMaxQuantity": {
+        "action": "Click",
+        "target": [
+            2280,
+            1210,
+            30,
+            30
+        ],
+        "post_delay": 150,
+        "next": [
+            "Keycard.ConfirmBuyDialog"
+        ]
+    },
+    "Keycard.ConfirmBuyDialog": {
+        "recognition": "OCR",
+        "roi": [
+            800,
+            800,
+            800,
+            300
+        ],
+        "expected": [
+            "确认购买",
+            "确定",
+            "购买"
+        ],
+        "action": "Click",
+        "post_delay": 400,
+        "next": [
+            "Keycard.CheckPurchaseSuccess",
+            "Keycard.CheckPurchaseSoldOut",
+            "Keycard.SoldOut",
+            "Keycard.CheckInsufficientFunds",
+            "Keycard.InsufficientFunds",
+            "CommonClosePopup",
+            "Keycard.ReturnToLobby",
+            "Keycard.RefreshList"
+        ],
+        "on_error": [
+            "Keycard.CloseDrawer",
+            "Keycard.ReturnToLobby"
+        ]
+    },
+    "Keycard.CheckPurchaseSuccess": {
+        "recognition": "OCR",
+        "roi": [
+            700,
+            600,
+            1160,
+            400
+        ],
+        "expected": [
+            "购买成功",
+            "获得物品",
+            "已存入仓库",
+            "交易成功"
+        ],
+        "action": "DoNothing",
+        "post_delay": 500,
+        "next": [
+            "CommonClosePopup",
+            "Keycard.ReturnToLobby"
+        ],
+        "on_error": [
+            "Keycard.ReturnToLobby"
+        ]
+    },
+    "Keycard.CheckPurchaseSoldOut": {
+        "recognition": "OCR",
+        "roi": [
+            700,
+            600,
+            1160,
+            400
+        ],
+        "expected": [
+            "已被购买",
+            "已下架",
+            "售罄",
+            "状态已改变",
+            "不存在"
+        ],
+        "action": "Click",
+        "post_delay": 400,
+        "next": [
+            "CommonClosePopup",
+            "Keycard.CloseDrawer",
+            "Keycard.RefreshList"
+        ],
+        "on_error": [
+            "Keycard.RefreshList"
+        ]
+    },
+    "Keycard.SoldOut": {
+        "recognition": "OCR",
+        "roi": [
+            700,
+            600,
+            1160,
+            400
+        ],
+        "expected": [
+            "已被购买",
+            "已下架",
+            "售罄",
+            "状态已改变",
+            "不存在"
+        ],
+        "action": "Click",
+        "post_delay": 400,
+        "next": [
+            "CommonClosePopup",
+            "Keycard.CloseDrawer",
+            "Keycard.RefreshList"
+        ],
+        "on_error": [
+            "Keycard.RefreshList"
+        ]
+    },
+    "Keycard.CheckInsufficientFunds": {
+        "recognition": "OCR",
+        "roi": [
+            700,
+            600,
+            1160,
+            400
+        ],
+        "expected": [
+            "余额不足",
+            "哈克币不足",
+            "哈夫币不足",
+            "三角券不足"
+        ],
+        "action": "Click",
+        "post_delay": 400,
+        "next": [
+            "CommonClosePopup",
+            "Keycard.ReturnToLobby"
+        ],
+        "on_error": [
+            "Keycard.ReturnToLobby"
+        ]
+    },
+    "Keycard.InsufficientFunds": {
+        "recognition": "OCR",
+        "roi": [
+            700,
+            600,
+            1160,
+            400
+        ],
+        "expected": [
+            "余额不足",
+            "哈克币不足",
+            "哈夫币不足",
+            "三角券不足"
+        ],
+        "action": "Click",
+        "post_delay": 400,
+        "next": [
+            "CommonClosePopup",
+            "Keycard.ReturnToLobby"
+        ],
+        "on_error": [
+            "Keycard.ReturnToLobby"
+        ]
+    },
+    "Keycard.CloseDrawer": {
+        "recognition": "OCR",
+        "roi": [
+            150,
+            1530,
+            150,
+            60
+        ],
+        "expected": [
+            "返回"
+        ],
+        "action": "Click",
+        "post_delay": 400,
+        "next": [
+            "Keycard.RefreshList",
+            "Keycard.ReturnToLobby"
+        ],
+        "on_error": [
+            "Keycard.RefreshList",
+            "Keycard.ReturnToLobby"
+        ]
+    },
+    "Keycard.RefreshList": {
+        "action": "Click",
+        "target": [
+            173,
+            818,
+            30,
+            30
+        ],
+        "post_delay": 500,
+        "max_hit": 100,
+        "next": [
+            "Keycard.SelectTargetKeycard",
+            "Keycard.SelectFirstItem",
+            "Keycard.EvaluatePrice",
+            "Keycard.ReturnToLobby"
+        ],
+        "on_error": [
+            "Keycard.ReturnToLobby"
+        ]
+    },
+    "Keycard.FastRefreshLoop": {
+        "action": "Click",
+        "target": [
+            173,
+            818,
+            30,
+            30
+        ],
+        "post_delay": 500,
+        "max_hit": 100,
+        "next": [
+            "Keycard.SelectTargetKeycard",
+            "Keycard.SelectFirstItem",
+            "Keycard.EvaluatePrice",
+            "Keycard.ReturnToLobby"
+        ],
+        "on_error": [
+            "Keycard.ReturnToLobby"
+        ]
+    },
+    "Keycard.ReturnToLobby": {
+        "recognition": "OCR",
+        "roi": [
+            180,
+            40,
+            160,
+            60
+        ],
+        "expected": [
+            "开始游戏",
+            "返回"
+        ],
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "Startup.CheckLobby",
+            "Keycard.SubpageReturn"
+        ],
+        "on_error": [
+            "Keycard.SubpageReturn"
+        ]
+    },
+    "Keycard.SubpageReturn": {
+        "recognition": "OCR",
+        "roi": [
+            120,
+            1520,
+            120,
+            70
+        ],
+        "expected": [
+            "返回",
+            "Esc",
+            "ESC"
+        ],
+        "action": "Click",
+        "max_hit": 3,
+        "post_delay": 600,
+        "next": [
+            "Keycard.ReturnToLobby",
+            "Startup.CheckLobby",
+            "Keycard.EscReturn"
+        ],
+        "on_error": [
+            "Keycard.EscReturn"
+        ]
+    },
+    "Keycard.EscReturn": {
+        "action": "ClickKey",
+        "key": 27,
+        "max_hit": 3,
+        "post_delay": 800,
+        "next": [
+            "Keycard.ReturnToLobby",
+            "Startup.CheckLobby"
+        ],
+        "on_error": [
+            "Startup.CheckLobby"
+        ]
+    }
+}

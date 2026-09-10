@@ -1,0 +1,307 @@
+{
+    "option": {
+        "KeycardTargetOption": {
+            "type": "select",
+            "label": "监控目标门卡",
+            "description": "选择交易行中持续监控并秒抢的高价值钥匙门卡",
+            "default_case": "SpaceBaseRed",
+            "cases": [
+                {
+                    "name": "SpaceBaseRed",
+                    "label": "航天基地核心区红卡",
+                    "description": "航天基地 - 核心区/总裁室红卡",
+                    "pipeline_override": {
+                        "Keycard.SearchCardName": {
+                            "input_text": "航天基地核心区"
+                        },
+                        "Keycard.SelectTargetKeycard": {
+                            "expected": [
+                                "航天基地核心区红卡",
+                                "航天基地",
+                                "核心区红卡"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "ZeroDamGold",
+                    "label": "零号大坝主控室金卡",
+                    "description": "零号大坝 - 主控室/行政辖区金卡",
+                    "pipeline_override": {
+                        "Keycard.SearchCardName": {
+                            "input_text": "零号大坝主控室"
+                        },
+                        "Keycard.SelectTargetKeycard": {
+                            "expected": [
+                                "零号大坝主控室金卡",
+                                "零号大坝",
+                                "主控室金卡"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "LongbowCreekRed",
+                    "label": "长弓溪谷变电站红卡",
+                    "description": "长弓溪谷 - 变电站红卡",
+                    "pipeline_override": {
+                        "Keycard.SearchCardName": {
+                            "input_text": "长弓溪谷变电站"
+                        },
+                        "Keycard.SelectTargetKeycard": {
+                            "expected": [
+                                "长弓溪谷变电站红卡",
+                                "长弓溪谷",
+                                "变电站红卡"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "BarkeshGold",
+                    "label": "巴克什行政区金卡",
+                    "description": "巴克什 - 行政区金卡",
+                    "pipeline_override": {
+                        "Keycard.SearchCardName": {
+                            "input_text": "巴克什行政区"
+                        },
+                        "Keycard.SelectTargetKeycard": {
+                            "expected": [
+                                "巴克什行政区金卡",
+                                "巴克什",
+                                "行政区金卡"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        "KeycardTargetCardOption": {
+            "type": "select",
+            "label": "监控目标门卡",
+            "description": "选择交易行中持续监控并秒抢的高价值钥匙门卡",
+            "default_case": "SpaceBaseRed",
+            "cases": [
+                {
+                    "name": "SpaceBaseRed",
+                    "label": "航天基地核心区红卡",
+                    "description": "航天基地 - 核心区/总裁室红卡",
+                    "pipeline_override": {
+                        "Keycard.SearchCardName": {
+                            "input_text": "航天基地核心区"
+                        },
+                        "Keycard.SelectTargetKeycard": {
+                            "expected": [
+                                "航天基地核心区红卡",
+                                "航天基地",
+                                "核心区红卡"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "ZeroDamGold",
+                    "label": "零号大坝主控室金卡",
+                    "description": "零号大坝 - 主控室/行政辖区金卡",
+                    "pipeline_override": {
+                        "Keycard.SearchCardName": {
+                            "input_text": "零号大坝主控室"
+                        },
+                        "Keycard.SelectTargetKeycard": {
+                            "expected": [
+                                "零号大坝主控室金卡",
+                                "零号大坝",
+                                "主控室金卡"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "LongbowCreekRed",
+                    "label": "长弓溪谷变电站红卡",
+                    "description": "长弓溪谷 - 变电站红卡",
+                    "pipeline_override": {
+                        "Keycard.SearchCardName": {
+                            "input_text": "长弓溪谷变电站"
+                        },
+                        "Keycard.SelectTargetKeycard": {
+                            "expected": [
+                                "长弓溪谷变电站红卡",
+                                "长弓溪谷",
+                                "变电站红卡"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "BarkeshGold",
+                    "label": "巴克什行政区金卡",
+                    "description": "巴克什 - 行政区金卡",
+                    "pipeline_override": {
+                        "Keycard.SearchCardName": {
+                            "input_text": "巴克什行政区"
+                        },
+                        "Keycard.SelectTargetKeycard": {
+                            "expected": [
+                                "巴克什行政区金卡",
+                                "巴克什",
+                                "行政区金卡"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        "KeycardMaxPriceOption": {
+            "type": "select",
+            "label": "最高买入限价",
+            "description": "当门卡挂售单价低于或等于该限价时立即触发秒抢",
+            "default_case": "Price1000k",
+            "cases": [
+                {
+                    "name": "Price500k",
+                    "label": "500000",
+                    "description": "500,000 哈夫币 (捡漏)",
+                    "pipeline_override": {
+                        "Keycard.EvaluatePrice": {
+                            "custom_recognition_param": {
+                                "max_price": 500000
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Price1000k",
+                    "label": "1000000",
+                    "description": "1,000,000 哈夫币 (推荐)",
+                    "pipeline_override": {
+                        "Keycard.EvaluatePrice": {
+                            "custom_recognition_param": {
+                                "max_price": 1000000
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Price2000k",
+                    "label": "2000000",
+                    "description": "2,000,000 哈夫币 (均价)",
+                    "pipeline_override": {
+                        "Keycard.EvaluatePrice": {
+                            "custom_recognition_param": {
+                                "max_price": 2000000
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "PriceUnlimited",
+                    "label": "99999999",
+                    "description": "99,999,999 哈夫币 (不限预算)",
+                    "pipeline_override": {
+                        "Keycard.EvaluatePrice": {
+                            "custom_recognition_param": {
+                                "max_price": 99999999
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        "KeycardDryRunOption": {
+            "type": "select",
+            "label": "秒抢执行模式",
+            "description": "控制是否真正下单扣费或仅执行价格监控",
+            "default_case": "DryRun",
+            "cases": [
+                {
+                    "name": "DryRun",
+                    "label": "DryRun 安全监控模式 (不扣费)",
+                    "description": "仅执行比价与目标检测，不点击购买与二次确认弹窗",
+                    "pipeline_override": {
+                        "Keycard.ClickBuyDirect": {
+                            "enabled": false
+                        },
+                        "Keycard.ConfirmBuyDialog": {
+                            "enabled": false
+                        }
+                    }
+                },
+                {
+                    "name": "RealAction",
+                    "label": "RealAction 实战极速秒抢 (自动扣费购买)",
+                    "description": "检测到目标低价卡后立即点击购买并自动确认弹窗",
+                    "pipeline_override": {
+                        "Keycard.ClickBuyDirect": {
+                            "enabled": true
+                        },
+                        "Keycard.ConfirmBuyDialog": {
+                            "enabled": true
+                        }
+                    }
+                },
+                {
+                    "name": "RealBuy",
+                    "label": "RealBuy 实战极速秒抢 (自动扣费购买)",
+                    "description": "检测到目标低价卡后立即点击购买并自动确认弹窗",
+                    "pipeline_override": {
+                        "Keycard.ClickBuyDirect": {
+                            "enabled": true
+                        },
+                        "Keycard.ConfirmBuyDialog": {
+                            "enabled": true
+                        }
+                    }
+                }
+            ]
+        },
+        "KeycardRefreshSpeedOption": {
+            "type": "select",
+            "label": "刷新间隔速度",
+            "description": "门卡列表刷新频率与防封延迟设置",
+            "default_case": "Speed500ms",
+            "cases": [
+                {
+                    "name": "Speed200ms",
+                    "label": "200ms",
+                    "description": "200毫秒 极速刷新",
+                    "pipeline_override": {
+                        "Keycard.RefreshList": {
+                            "post_delay": 200
+                        },
+                        "Keycard.FastRefreshLoop": {
+                            "post_delay": 200
+                        }
+                    }
+                },
+                {
+                    "name": "Speed500ms",
+                    "label": "500ms",
+                    "description": "500毫秒 标准刷新",
+                    "pipeline_override": {
+                        "Keycard.RefreshList": {
+                            "post_delay": 500
+                        },
+                        "Keycard.FastRefreshLoop": {
+                            "post_delay": 500
+                        }
+                    }
+                }
+            ]
+        }
+    },
+    "task": [
+        {
+            "name": "KeycardSniping",
+            "label": "交易行门卡/钥匙卡极速秒抢",
+            "description": "在交易行对航天基地、零号大坝、长弓溪谷、巴克什等高价值钥匙门卡进行低价持续监控与毫秒级自动抢购，支持自定义最高预算与DryRun安全预览。",
+            "entry": "Keycard.Start",
+            "option": [
+                "KeycardTargetOption",
+                "KeycardMaxPriceOption",
+                "KeycardDryRunOption",
+                "KeycardRefreshSpeedOption"
+            ]
+        }
+    ]
+}
