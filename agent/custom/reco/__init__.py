@@ -1,6 +1,9 @@
 from importlib import import_module
 
-RECO_MODULES = ("general",)
+RECO_MODULES = (
+    "general",
+    "price_evaluator",
+)
 
 
 def register_all() -> None:

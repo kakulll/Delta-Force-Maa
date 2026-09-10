@@ -1,0 +1,82 @@
+{
+    "option": {
+        "TradingMaxPriceOption": {
+            "type": "select",
+            "label": "最高购买限价（预算）",
+            "description": "当交易行价格低于或等于该限价时自动执行购买",
+            "default_case": "Price5w",
+            "cases": [
+                {
+                    "name": "Price3w",
+                    "label": "30,000 (极低价极限捡漏)",
+                    "pipeline_override": {
+                        "Trading.EvaluatePrice": {
+                            "custom_recognition_param": {
+                                "max_price": 30000
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Price5w",
+                    "label": "50,000 (均衡推荐)",
+                    "pipeline_override": {
+                        "Trading.EvaluatePrice": {
+                            "custom_recognition_param": {
+                                "max_price": 50000
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Price10w",
+                    "label": "100,000 (快速采购)",
+                    "pipeline_override": {
+                        "Trading.EvaluatePrice": {
+                            "custom_recognition_param": {
+                                "max_price": 100000
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        "TradingAutoMaxQuantity": {
+            "type": "switch",
+            "label": "是否自动选择最大数量",
+            "description": "购买时自动点击数量最大化按钮",
+            "default_case": "Enabled",
+            "cases": [
+                {
+                    "name": "Enabled",
+                    "label": "开启",
+                    "pipeline_override": {
+                        "Trading.SelectMaxQuantity": {
+                            "enabled": true
+                        }
+                    }
+                },
+                {
+                    "name": "Disabled",
+                    "label": "关闭",
+                    "pipeline_override": {
+                        "Trading.SelectMaxQuantity": {
+                            "enabled": false
+                        }
+                    }
+                }
+            ]
+        }
+    },
+    "task": [
+        {
+            "name": "Trading",
+            "label": "交易行自动捡漏与采购",
+            "entry": "Trading.Start",
+            "option": [
+                "TradingMaxPriceOption",
+                "TradingAutoMaxQuantity"
+            ]
+        }
+    ]
+}

@@ -23,7 +23,8 @@
     "import": [
         "./tasks/startup.json",
         "./tasks/daily.json",
-        "./tasks/shelter.json"
+        "./tasks/shelter.json",
+        "./tasks/trading.json"
     ],
     "agent": [
         {
