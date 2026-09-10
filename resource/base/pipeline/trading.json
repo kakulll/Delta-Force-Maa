@@ -30,14 +30,14 @@
     "Trading.CheckTradingOpen": {
         "recognition": "OCR",
         "roi": [
-            0,
-            0,
-            500,
-            200
+            100,
+            100,
+            350,
+            250
         ],
         "expected": [
-            "全部商品",
-            "我的关注",
+            "购买",
+            "出售",
             "收藏"
         ],
         "action": "DoNothing",
@@ -49,13 +49,12 @@
     "Trading.SelectFavoriteTab": {
         "recognition": "OCR",
         "roi": [
-            0,
             100,
-            350,
-            400
+            250,
+            150,
+            120
         ],
         "expected": [
-            "我的关注",
             "收藏"
         ],
         "action": "Click",
@@ -67,10 +66,10 @@
     "Trading.SelectFirstFavorite": {
         "action": "Click",
         "target": [
-            440,
-            173,
-            20,
-            20
+            750,
+            250,
+            100,
+            60
         ],
         "post_delay": 600,
         "next": [
@@ -82,10 +81,10 @@
     "Trading.OcrPrice": {
         "recognition": "OCR",
         "roi": [
-            198,
-            114,
-            72,
-            18
+            200,
+            220,
+            350,
+            50
         ],
         "replace": [
             [
@@ -127,10 +126,10 @@
     "Trading.ClickBuyDirect": {
         "action": "Click",
         "target": [
-            1083,
-            610,
-            30,
-            20
+            2150,
+            1470,
+            100,
+            40
         ],
         "post_delay": 300,
         "next": [
@@ -142,10 +141,10 @@
     "Trading.SelectMaxQuantity": {
         "action": "Click",
         "target": [
-            1164,
-            556,
-            20,
-            20
+            2280,
+            1210,
+            30,
+            30
         ],
         "post_delay": 200,
         "next": [
@@ -155,10 +154,10 @@
     "Trading.ConfirmBuyDialog": {
         "recognition": "OCR",
         "roi": [
-            400,
-            450,
-            480,
-            200
+            800,
+            800,
+            800,
+            300
         ],
         "expected": [
             "确认购买",
@@ -176,10 +175,10 @@
     "Trading.AntiLagRefresh": {
         "action": "Click",
         "target": [
-            213,
-            180,
-            20,
-            20
+            173,
+            818,
+            30,
+            30
         ],
         "post_delay": 400,
         "next": [
@@ -190,13 +189,14 @@
     "Trading.CloseTrading": {
         "recognition": "OCR",
         "roi": [
-            0,
-            0,
-            200,
-            150
+            150,
+            1530,
+            150,
+            60
         ],
         "expected": [
-            "返回"
+            "返回",
+            "开始游戏"
         ],
         "action": "Click",
         "post_delay": 800,

@@ -47,14 +47,21 @@ class PriceEvaluator(CustomRecognition):
         if not is_hit(reco_detail):
             return None
 
-        detail_obj = getattr(reco_detail, "detail", None)
         raw_text = ""
-        if isinstance(detail_obj, dict):
-            raw_text = str(detail_obj.get("text", ""))
-        elif isinstance(detail_obj, list) and detail_obj:
-            raw_text = "".join(str(item.get("text", "")) for item in detail_obj if isinstance(item, dict))
+        if hasattr(reco_detail, "best_result") and reco_detail.best_result and hasattr(reco_detail.best_result, "text"):
+            raw_text = str(reco_detail.best_result.text)
+        elif hasattr(reco_detail, "all_results") and reco_detail.all_results:
+            raw_text = " ".join(str(r.text) for r in reco_detail.all_results if hasattr(r, "text"))
+        elif hasattr(reco_detail, "raw_detail"):
+            raw_text = str(reco_detail.raw_detail)
         else:
-            raw_text = str(detail_obj or "")
+            detail_obj = getattr(reco_detail, "detail", None)
+            if isinstance(detail_obj, dict):
+                raw_text = str(detail_obj.get("text", ""))
+            elif isinstance(detail_obj, list) and detail_obj:
+                raw_text = "".join(str(item.get("text", "")) for item in detail_obj if isinstance(item, dict))
+            else:
+                raw_text = str(detail_obj or "")
 
         # 借鉴 GTImaster 的字符清洗算法：纠正常见 OCR 误识别（O/Q/D -> 0）及标点
         cleaned_text = (

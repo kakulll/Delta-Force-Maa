@@ -2,10 +2,10 @@
     "CommonClosePopup": {
         "recognition": "OCR",
         "roi": [
-            350,
-            400,
-            580,
-            260
+            800,
+            800,
+            800,
+            300
         ],
         "expected": [
             "确定",
@@ -20,12 +20,13 @@
     "CommonReturnLobby": {
         "recognition": "OCR",
         "roi": [
-            0,
-            0,
-            300,
-            150
+            180,
+            40,
+            160,
+            60
         ],
         "expected": [
+            "开始游戏",
             "返回",
             "退出"
         ],

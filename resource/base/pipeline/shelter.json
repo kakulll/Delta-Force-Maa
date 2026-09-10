@@ -89,12 +89,13 @@
     "Shelter.ReturnLobby": {
         "recognition": "OCR",
         "roi": [
-            0,
-            0,
-            250,
-            150
+            180,
+            40,
+            160,
+            60
         ],
         "expected": [
+            "开始游戏",
             "返回"
         ],
         "action": "Click",
